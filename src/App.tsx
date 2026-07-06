@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
 import { Button } from "./components/ui/Button";
@@ -14,6 +15,9 @@ import { Dropdown } from "./components/ui/Dropdown";
 import { DataTable } from "./components/ui/DataTable";
 
 function DesignSystem() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
     <div className="p-10 space-y-10">
 
@@ -96,6 +100,30 @@ function DesignSystem() {
             { key: "b", header: "Column B", sortable: true },
           ]}
         />
+      </Card>
+
+      {/* Modal */}
+      <Card>
+        <h2 className="font-semibold mb-3">Modal</h2>
+        <Button onClick={() => setModalOpen(true)}>Open modal</Button>
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+          <h3 className="font-semibold mb-2">Modal title</h3>
+          <p className="text-sm text-muted mb-4">This is a preview of the Modal primitive.</p>
+          <Button onClick={() => setModalOpen(false)}>Close</Button>
+        </Modal>
+      </Card>
+
+      {/* Drawer */}
+      <Card>
+        <h2 className="font-semibold mb-3">Drawer</h2>
+        <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
+        <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+          <div className="p-6">
+            <h3 className="font-semibold mb-2">Drawer title</h3>
+            <p className="text-sm text-muted mb-4">This is a preview of the Drawer primitive.</p>
+            <Button onClick={() => setDrawerOpen(false)}>Close</Button>
+          </div>
+        </Drawer>
       </Card>
 
     </div>
