@@ -1,3 +1,4 @@
+// src/pages/LoginPage.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
@@ -5,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Card } from "../components/ui/Card";
+import { MomentumSparkline } from "../components/dashboard/MomentumSparkline";
 
 type Mode = "login" | "signup";
 
@@ -76,17 +78,17 @@ export default function LoginPage() {
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-[3fr_2fr] bg-paper">
 
       {/* LEFT: form, roughly 60% on desktop */}
-      <div className="flex items-center justify-center p-10">
+      <div className="flex items-center justify-center p-6 sm:p-10">
         <Card className="w-full max-w-md space-y-4">
 
           <div>
-            <h2 className="text-2xl font-semibold text-ink">
-              {mode === "login" ? "Welcome back" : "Create your account"}
+            <h2 className="text-2xl font-display font-semibold text-ink">
+              {mode === "login" ? "Good to see you again" : "Start your momentum"}
             </h2>
             <p className="text-sm text-muted">
               {mode === "login"
-                ? "Sign in to continue"
-                : "Start tracking your applications"}
+                ? "Sign in to pick up right where you left off."
+                : "One step closer to your next yes. Let's track it."}
             </p>
           </div>
 
@@ -156,11 +158,15 @@ export default function LoginPage() {
         </Card>
       </div>
 
-      {/* RIGHT: signature visual panel, roughly 40% on desktop */}
-      <div className="hidden md:flex flex-col justify-center p-16 bg-ink text-paper">
-        <h1 className="text-4xl font-display font-bold mb-4">Momentum</h1>
-        <p className="opacity-70 max-w-sm">
-          Track every application. See your progress add up.
+      {/* RIGHT: signature visual panel, roughly 40% on desktop.
+          Paper background, matching the rest of the app, not an
+          inverted color block. */}
+      <div className="hidden md:flex flex-col justify-center items-start gap-6 p-16 bg-paper border-l border-muted/10">
+        <h1 className="text-4xl font-display font-bold text-ink">Momentum</h1>
+        <MomentumSparkline className="w-48 h-24" />
+        <p className="text-muted max-w-sm">
+          Every application moves the line forward. Watch your progress build,
+          one step at a time.
         </p>
       </div>
 
