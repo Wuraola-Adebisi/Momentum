@@ -51,15 +51,15 @@ export function DataTable({ data, columns }: DataTableProps) {
   };
 
   return (
-    <div className="w-full overflow-x-auto border rounded-md bg-white">
-      <table className="w-full text-sm">
+    <div className="w-full overflow-x-auto border border-muted/20 rounded-md bg-surface">
+      <table className="w-full text-sm font-data">
 
         <thead>
-          <tr className="border-b bg-gray-50">
+          <tr className="border-b border-muted/20 bg-paper">
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`text-left p-3 font-medium ${
+                className={`text-left p-3 font-medium font-body text-ink ${
                   col.sortable ? "cursor-pointer select-none" : ""
                 }`}
                 onClick={() => col.sortable && handleSort(col.key)}
@@ -68,7 +68,7 @@ export function DataTable({ data, columns }: DataTableProps) {
                   {col.header}
 
                   {sortKey === col.key && (
-                    <span className="text-xs">
+                    <span className="text-xs text-muted">
                       {direction === "asc" ? "↑" : "↓"}
                     </span>
                   )}
@@ -80,9 +80,9 @@ export function DataTable({ data, columns }: DataTableProps) {
 
         <tbody>
           {sortedData.map((row, i) => (
-            <tr key={i} className="border-b hover:bg-gray-50">
+            <tr key={i} className="border-b border-muted/10 hover:bg-paper transition-colors">
               {columns.map((col) => (
-                <td key={col.key} className="p-3">
+                <td key={col.key} className="p-3 text-ink">
                   {String(row[col.key] ?? "")}
                 </td>
               ))}
