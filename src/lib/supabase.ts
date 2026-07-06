@@ -1,3 +1,4 @@
+// src/lib/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database.types";
 
@@ -21,7 +22,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * Global type augmentation for HMR-safe singleton
  */
 declare global {
-  // eslint-disable-next-line no-var
   var supabase: ReturnType<typeof createClient<Database>> | undefined;
 }
 
