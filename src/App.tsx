@@ -39,7 +39,7 @@ function Home() {
       </div>
 
       <Card>
-        <p className="text-gray-500 text-sm">
+        <p className="text-muted text-sm">
           Base shell working. Router + Auth layer now integrated.
         </p>
       </Card>
@@ -132,7 +132,7 @@ function DesignSystem() {
 
         <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
           <h3 className="font-semibold mb-2">Modal title</h3>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-muted mb-4">
             This is a preview of the Modal primitive.
           </p>
           <Button onClick={() => setModalOpen(false)}>Close</Button>
@@ -146,7 +146,7 @@ function DesignSystem() {
         <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           <div className="p-6">
             <h3 className="font-semibold mb-2">Drawer title</h3>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-muted mb-4">
               This is a preview of the Drawer primitive.
             </p>
             <Button onClick={() => setDrawerOpen(false)}>Close</Button>
@@ -162,7 +162,7 @@ function Dashboard() {
   return (
     <div className="p-10 space-y-3">
       <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="text-gray-500">
+      <p className="text-muted">
         This route is protected. If you see this, auth is working.
       </p>
     </div>
