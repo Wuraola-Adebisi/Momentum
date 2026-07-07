@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+
 import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
+import Applications from "./pages/Applications";
+import Interviews from "./pages/Interviews";
+import Notes from "./pages/Notes";
+import Settings from "./pages/Settings";
+
+import DashboardLayout from "./components/layout/DashboardLayout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import {
   Button,
@@ -17,11 +26,9 @@ import {
   DataTable,
 } from "./components/ui";
 
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-
 function Home() {
   return (
-    <div className="p-10 space-y-4 bg-paper min-h-screen">
+    <div className="min-h-screen bg-paper p-10 space-y-4">
       <h1 className="text-xl font-bold">Momentum</h1>
 
       <div className="flex gap-3">
@@ -34,13 +41,13 @@ function Home() {
         </Link>
 
         <Link to="/dashboard">
-          <Button variant="ghost">Dashboard (Protected)</Button>
+          <Button variant="ghost">Dashboard</Button>
         </Link>
       </div>
 
       <Card>
-        <p className="text-muted text-sm">
-          Base shell working. Router + Auth layer now integrated.
+        <p className="text-sm text-muted">
+          Base shell working. Router, Auth, Sidebar and TopBar are integrated.
         </p>
       </Card>
     </div>
@@ -52,12 +59,11 @@ function DesignSystem() {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <div className="p-10 space-y-10 bg-paper min-h-screen">
-
+    <div className="min-h-screen bg-paper p-10 space-y-10">
       <h1 className="text-2xl font-bold">Design System</h1>
 
       <Card>
-        <h2 className="font-semibold mb-3">Buttons</h2>
+        <h2 className="mb-3 font-semibold">Buttons</h2>
         <div className="flex gap-3">
           <Button>Primary</Button>
           <Button variant="secondary">Secondary</Button>
@@ -66,12 +72,12 @@ function DesignSystem() {
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Inputs</h2>
+        <h2 className="mb-3 font-semibold">Inputs</h2>
         <Input placeholder="Type here..." />
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Badges</h2>
+        <h2 className="mb-3 font-semibold">Badges</h2>
         <div className="flex gap-2">
           <Badge variant="applied">Applied</Badge>
           <Badge variant="interviewing">Interviewing</Badge>
@@ -80,12 +86,12 @@ function DesignSystem() {
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Avatar</h2>
+        <h2 className="mb-3 font-semibold">Avatar</h2>
         <Avatar name="Tech Corp" />
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Skeleton</h2>
+        <h2 className="mb-3 font-semibold">Skeleton</h2>
         <Skeleton className="h-6 w-full" />
       </Card>
 
@@ -109,7 +115,7 @@ function DesignSystem() {
             { label: "One", value: "1" },
             { label: "Two", value: "2" },
           ]}
-          onSelect={(v) => console.log(v)}
+          onSelect={(value) => console.log(value)}
         />
       </Card>
 
@@ -127,44 +133,52 @@ function DesignSystem() {
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Modal</h2>
-        <Button onClick={() => setModalOpen(true)}>Open modal</Button>
+        <h2 className="mb-3 font-semibold">Modal</h2>
 
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-          <h3 className="font-semibold mb-2">Modal title</h3>
-          <p className="text-sm text-muted mb-4">
+        <Button onClick={() => setModalOpen(true)}>
+          Open modal
+        </Button>
+
+        <Modal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        >
+          <h3 className="mb-2 font-semibold">Modal title</h3>
+
+          <p className="mb-4 text-sm text-muted">
             This is a preview of the Modal primitive.
           </p>
-          <Button onClick={() => setModalOpen(false)}>Close</Button>
+
+          <Button onClick={() => setModalOpen(false)}>
+            Close
+          </Button>
         </Modal>
       </Card>
 
       <Card>
-        <h2 className="font-semibold mb-3">Drawer</h2>
-        <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
+        <h2 className="mb-3 font-semibold">Drawer</h2>
 
-        <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <Button onClick={() => setDrawerOpen(true)}>
+          Open drawer
+        </Button>
+
+        <Drawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
           <div className="p-6">
-            <h3 className="font-semibold mb-2">Drawer title</h3>
-            <p className="text-sm text-muted mb-4">
+            <h3 className="mb-2 font-semibold">Drawer title</h3>
+
+            <p className="mb-4 text-sm text-muted">
               This is a preview of the Drawer primitive.
             </p>
-            <Button onClick={() => setDrawerOpen(false)}>Close</Button>
+
+            <Button onClick={() => setDrawerOpen(false)}>
+              Close
+            </Button>
           </div>
         </Drawer>
       </Card>
-
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div className="p-10 space-y-3">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="text-muted">
-        This route is protected. If you see this, auth is working.
-      </p>
     </div>
   );
 }
@@ -173,18 +187,24 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+
       <Route path="/login" element={<LoginPage />} />
+
       <Route path="/design-system" element={<DesignSystem />} />
 
-      {/* Protected route test */}
       <Route
-        path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <DashboardLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/applications" element={<Applications />} />
+        <Route path="/interviews" element={<Interviews />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
     </Routes>
   );
 }
