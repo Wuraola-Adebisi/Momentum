@@ -12,7 +12,7 @@ export default function DashboardLayout() {
 
         <TopBar />
 
-        <main className="flex-1 overflow-auto p-8">
+        <main className="mx-auto w-full max-w-content flex-1 overflow-auto p-4 pb-24 md:p-8 md:pb-8">
           <Outlet />
         </main>
 

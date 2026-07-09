@@ -11,25 +11,25 @@ module.exports = {
     },
     extend: {
       colors: {
-        paper: "#FAF9F6",
+        paper: "#FAFAFA",
         surface: "#FFFFFF",
 
-        ink: "#1A1B1E",
-        muted: "#8B92A0",
+        ink: "#0B2A4D",
+        muted: "#64748B",
 
-        primary: "#D9A441",
+        primary: "#2563EB",
 
         status: {
-          applied: "#7DA8D9",
-          interviewing: "#D9A441",
-          offer: "#4CA97A",
-          rejected: "#C77B7B",
+          applied: "#2563EB",
+          interviewing: "#6C4FD9",
+          offer: "#1E9E6B",
+          rejected: "#DC5B5B",
         },
       },
       fontFamily: {
-        display: ["Onest", "sans-serif"],
-        body: ["Public Sans", "sans-serif"],
-        data: ["IBM Plex Mono", "monospace"],
+        display: ["Sora", "sans-serif"],
+        body: ["Work Sans", "sans-serif"],
+        data: ["Roboto Mono", "monospace"],
       },
       maxWidth: {
         content: "1760px",

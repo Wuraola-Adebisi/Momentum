@@ -1,12 +1,12 @@
 // src/pages/LoginPage.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "../lib/supabase";
 
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
-import { Card } from "../components/ui/Card";
-import { MomentumSparkline } from "../components/dashboard/MomentumSparkline";
+import { Field } from "../components/ui/Field";
 
 type Mode = "login" | "signup";
 
@@ -14,13 +14,16 @@ export default function LoginPage() {
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  async function handleSubmit() {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
     setLoading(true);
     setError(null);
     setMessage(null);
@@ -74,62 +77,85 @@ export default function LoginPage() {
     // so there is nothing else to do here.
   }
 
+  function toggleMode() {
+    setMode(mode === "login" ? "signup" : "login");
+    setError(null);
+    setMessage(null);
+  }
+
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-[3fr_2fr] bg-paper">
+    <div className="min-h-screen flex items-center justify-center bg-paper px-6 py-12">
+      <div className="w-full max-w-sm">
 
-      {/* LEFT: form, roughly 60% on desktop */}
-      <div className="flex items-center justify-center p-6 sm:p-10">
-        <Card className="w-full max-w-md space-y-4">
+        <p className="text-center font-display text-base font-bold text-ink mb-10">
+          Momentum
+        </p>
 
-          <div>
-            <h2 className="text-2xl font-display font-semibold text-ink">
-              {mode === "login" ? "Good to see you again" : "Start your momentum"}
-            </h2>
-            <p className="text-sm text-muted">
-              {mode === "login"
-                ? "Sign in to pick up right where you left off."
-                : "One step closer to your next yes. Let's track it."}
-            </p>
-          </div>
+        <h1 className="text-center font-display text-2xl font-bold text-ink mb-2">
+          {mode === "login" ? "Let's find your next role" : "Start your momentum"}
+        </h1>
 
-          <div className="flex flex-col gap-2">
-            <Button variant="secondary" onClick={() => handleOAuth("google")} className="w-full">
-              Continue with Google
-            </Button>
-            <Button variant="secondary" onClick={() => handleOAuth("github")} className="w-full">
-              Continue with GitHub
-            </Button>
-          </div>
+        <p className="text-center text-sm text-muted mb-8">
+          {mode === "login"
+            ? "Sign in to pick up where you left off."
+            : "Track every application, interview, and offer in one place."}
+        </p>
 
-          <div className="flex items-center gap-3 text-xs text-muted">
-            <div className="flex-1 h-px bg-muted/20" />
-            or
-            <div className="flex-1 h-px bg-muted/20" />
-          </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
 
-          <Input
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <Field label="Email">
+            <Input
+              type="email"
+              autoComplete="email"
+              autoFocus
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Field>
 
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Field label="Password">
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+          </Field>
+
+          {mode === "login" && (
+            <button
+              type="button"
+              className="self-end -mt-2 text-xs text-primary font-medium"
+            >
+              Forgot password?
+            </button>
+          )}
 
           {error && (
-            <p className="text-status-rejected text-sm">{error}</p>
+            <p className="text-status-rejected text-sm text-center">{error}</p>
           )}
 
           {message && (
-            <p className="text-status-offer text-sm">{message}</p>
+            <p className="text-status-offer text-sm text-center">{message}</p>
           )}
 
           <Button
-            onClick={handleSubmit}
+            type="submit"
+            variant="accent"
             disabled={loading}
             className="w-full"
           >
@@ -137,39 +163,46 @@ export default function LoginPage() {
               ? "Please wait..."
               : mode === "login"
               ? "Sign in"
-              : "Sign up"}
+              : "Create account"}
           </Button>
 
-          <p className="text-sm text-muted text-center">
-            {mode === "login" ? "New here?" : "Already have an account?"}{" "}
-            <button
-              type="button"
-              onClick={() => {
-                setMode(mode === "login" ? "signup" : "login");
-                setError(null);
-                setMessage(null);
-              }}
-              className="text-primary font-medium underline"
-            >
-              {mode === "login" ? "Create an account" : "Sign in instead"}
-            </button>
-          </p>
+        </form>
 
-        </Card>
-      </div>
+        <div className="flex items-center gap-3 text-xs text-muted my-6">
+          <div className="flex-1 h-px bg-muted/20" />
+          or continue with
+          <div className="flex-1 h-px bg-muted/20" />
+        </div>
 
-      {/* RIGHT: signature visual panel, roughly 40% on desktop.
-          Paper background, matching the rest of the app, not an
-          inverted color block. */}
-      <div className="hidden md:flex flex-col justify-center items-start gap-6 p-16 bg-paper border-l border-muted/10">
-        <h1 className="text-4xl font-display font-bold text-ink">Momentum</h1>
-        <MomentumSparkline className="w-48 h-24" />
-        <p className="text-muted max-w-sm">
-          Every application moves the line forward. Watch your progress build,
-          one step at a time.
+        <div className="flex gap-2 mb-6">
+          <Button
+            variant="secondary"
+            onClick={() => handleOAuth("google")}
+            className="flex-1"
+          >
+            Google
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => handleOAuth("github")}
+            className="flex-1"
+          >
+            GitHub
+          </Button>
+        </div>
+
+        <p className="text-sm text-muted text-center">
+          {mode === "login" ? "New here?" : "Already have an account?"}{" "}
+          <button
+            type="button"
+            onClick={toggleMode}
+            className="text-primary font-medium underline"
+          >
+            {mode === "login" ? "Create an account" : "Sign in instead"}
+          </button>
         </p>
-      </div>
 
+      </div>
     </div>
   );
 }

@@ -4,9 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
-import Interviews from "./pages/Interviews";
-import Notes from "./pages/Notes";
-import Settings from "./pages/Settings";
+import Analytics from "./pages/Analytics";
 
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -201,9 +199,7 @@ export default function App() {
       >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />
-        <Route path="/interviews" element={<Interviews />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/analytics" element={<Analytics />} />
       </Route>
     </Routes>
   );

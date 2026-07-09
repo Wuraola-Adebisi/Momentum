@@ -44,10 +44,10 @@ export const Button: React.FC<ButtonProps> = ({
     destructive:
       "bg-status-rejected text-white hover:opacity-90",
 
-    // Ochre, reserved for the quick-add button, active nav state,
-    // anywhere that needs the single brand accent instead of Ink
+    // Blue, the single brand accent: quick-add button, active nav state,
+    // primary form actions. White text for contrast against a saturated blue.
     accent:
-      "bg-primary text-ink hover:opacity-90",
+      "bg-primary text-white hover:opacity-90",
   };
 
   const sizes: Record<ButtonSize, string> = {
