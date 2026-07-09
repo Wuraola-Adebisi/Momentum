@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
+import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
 import Analytics from "./pages/Analytics";
@@ -23,34 +24,6 @@ import {
   Dropdown,
   DataTable,
 } from "./components/ui";
-
-function Home() {
-  return (
-    <div className="min-h-screen bg-paper p-10 space-y-4">
-      <h1 className="text-xl font-bold">Momentum</h1>
-
-      <div className="flex gap-3">
-        <Link to="/design-system">
-          <Button>Design System</Button>
-        </Link>
-
-        <Link to="/login">
-          <Button variant="secondary">Login Page</Button>
-        </Link>
-
-        <Link to="/dashboard">
-          <Button variant="ghost">Dashboard</Button>
-        </Link>
-      </div>
-
-      <Card>
-        <p className="text-sm text-muted">
-          Base shell working. Router, Auth, Sidebar and TopBar are integrated.
-        </p>
-      </Card>
-    </div>
-  );
-}
 
 function DesignSystem() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -184,7 +157,7 @@ function DesignSystem() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Homepage />} />
 
       <Route path="/login" element={<LoginPage />} />
 
