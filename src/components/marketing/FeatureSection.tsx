@@ -23,7 +23,7 @@ export function FeatureSection({
   return (
     <div
       className={clsx(
-        "mx-auto flex w-full max-w-content flex-col items-center gap-8 px-6 py-14 md:flex-row md:gap-10 md:px-10 md:py-20 3xl:max-w-content",
+        "mx-auto flex w-full max-w-content flex-col items-center gap-8 px-6 py-14 sm:px-8 md:flex-row md:gap-10 md:px-12 md:py-20 lg:px-16 3xl:max-w-content",
         reverse && "md:flex-row-reverse"
       )}
     >
