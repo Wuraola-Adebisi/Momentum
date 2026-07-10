@@ -1,6 +1,6 @@
 // src/pages/LoginPage.tsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "../lib/supabase";
 
@@ -11,7 +11,14 @@ import { Field } from "../components/ui/Field";
 type Mode = "login" | "signup";
 
 export default function LoginPage() {
-  const [mode, setMode] = useState<Mode>("login");
+  const [searchParams] = useSearchParams();
+
+  // The homepage's "Get started" buttons link here with ?mode=signup so
+  // they land on account creation instead of sign in. Any other value
+  // (or none) falls back to login.
+  const [mode, setMode] = useState<Mode>(
+    searchParams.get("mode") === "signup" ? "signup" : "login"
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
