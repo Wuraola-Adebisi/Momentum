@@ -1,17 +1,55 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Button, Skeleton, EmptyState, Modal } from "../components/ui";
 import { ApplicationForm } from "../components/applications/ApplicationForm";
 import { ApplicationTable } from "../components/applications/ApplicationTable";
+import { FilterBar } from "../components/applications/FilterBar";
+import { SearchBar } from "../components/applications/SearchBar";
+import { DEFAULT_SORT } from "../lib/applicationSort";
 import { useApplications, useDeleteApplication } from "../hooks/useApplications";
 import type { Application } from "../types";
 
 export default function Applications() {
   const { data: applications, isLoading, isError, error } = useApplications();
   const deleteApplication = useDeleteApplication();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [formOpen, setFormOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
+
+  const hasActiveFilters = searchParams.has("status") || searchParams.has("q");
+
+  const visibleApplications = useMemo(() => {
+    if (!applications) return [];
+
+    const status = searchParams.get("status");
+    const query = (searchParams.get("q") ?? "").trim().toLowerCase();
+    const [sortKey, sortDir] = (searchParams.get("sort") ?? DEFAULT_SORT).split("-") as [
+      keyof Application,
+      "asc" | "desc"
+    ];
+
+    let result = applications;
+
+    if (status) {
+      result = result.filter((application) => application.status === status);
+    }
+
+    if (query) {
+      result = result.filter(
+        (application) =>
+          application.companyName.toLowerCase().includes(query) ||
+          application.roleTitle.toLowerCase().includes(query)
+      );
+    }
+
+    return [...result].sort((a, b) => {
+      const aValue = String(a[sortKey] ?? "");
+      const bValue = String(b[sortKey] ?? "");
+      return sortDir === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    });
+  }, [applications, searchParams]);
 
   function openCreateForm() {
     setEditingApplication(undefined);
@@ -21,6 +59,13 @@ export default function Applications() {
   function openEditForm(application: Application) {
     setEditingApplication(application);
     setFormOpen(true);
+  }
+
+  function clearFilters() {
+    const next = new URLSearchParams(searchParams);
+    next.delete("status");
+    next.delete("q");
+    setSearchParams(next);
   }
 
   async function confirmDelete() {
@@ -41,6 +86,15 @@ export default function Applications() {
           Add application
         </Button>
       </div>
+
+      {!isLoading && !isError && applications && applications.length > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <SearchBar />
+          <div className="sm:ml-auto sm:flex-1">
+            <FilterBar />
+          </div>
+        </div>
+      )}
 
       {isLoading && (
         <div className="space-y-3">
@@ -65,9 +119,22 @@ export default function Applications() {
         />
       )}
 
-      {!isLoading && !isError && applications && applications.length > 0 && (
+      {!isLoading &&
+        !isError &&
+        applications &&
+        applications.length > 0 &&
+        visibleApplications.length === 0 && (
+          <EmptyState
+            title="No applications match your filters"
+            description="Try a different search or clear your filters to see everything."
+            actionLabel={hasActiveFilters ? "Clear filters" : undefined}
+            onAction={hasActiveFilters ? clearFilters : undefined}
+          />
+        )}
+
+      {!isLoading && !isError && visibleApplications.length > 0 && (
         <ApplicationTable
-          applications={applications}
+          applications={visibleApplications}
           onEdit={openEditForm}
           onDelete={(application) => setPendingDelete(application)}
         />
