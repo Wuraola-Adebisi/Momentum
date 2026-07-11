@@ -5,6 +5,7 @@ export { Avatar } from "./Avatar";
 export { Input } from "./Input";
 export { Textarea } from "./Textarea";
 export { Select } from "./Select";
+export { Field } from "./Field";
 
 export { Skeleton } from "./Skeleton";
 export { EmptyState } from "./EmptyState";
@@ -15,3 +16,4 @@ export { Tooltip } from "./Tooltip";
 export { Dropdown } from "./Dropdown";
 
 export { DataTable } from "./DataTable";
+export type { Column } from "./DataTable";
