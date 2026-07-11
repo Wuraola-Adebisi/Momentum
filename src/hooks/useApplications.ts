@@ -91,3 +91,65 @@ export function useDeleteApplication() {
     },
   });
 }
+
+interface UpdateStatusInput {
+  id: string;
+  status: Application["status"];
+  position: number;
+}
+
+/**
+ * Moves a card to a new status/position, used by the Kanban board's
+ * drag-and-drop and the mobile status-picker fallback. Updates the local
+ * cache immediately (`onMutate`) so the card appears to move instantly,
+ * then rolls back to the previous cache (`onError`) if the Supabase write
+ * fails, rather than leaving the UI showing a move that didn't happen.
+ */
+export function useUpdateApplicationStatus() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+
+  return useMutation({
+    mutationFn: async ({ id, status, position }: UpdateStatusInput) => {
+      const { error } = await supabase
+        .from("applications")
+        .update({ status, position })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      if (user) {
+        await supabase.from("activity_log").insert({
+          user_id: user.id,
+          application_id: id,
+          action_type: "status_changed",
+          description: `Moved to ${status}`,
+        });
+      }
+    },
+
+    onMutate: async ({ id, status, position }) => {
+      await queryClient.cancelQueries({ queryKey: APPLICATIONS_KEY });
+      const previous = queryClient.getQueryData<Application[]>(APPLICATIONS_KEY);
+
+      queryClient.setQueryData<Application[]>(APPLICATIONS_KEY, (old) =>
+        old?.map((application) =>
+          application.id === id ? { ...application, status, position } : application
+        )
+      );
+
+      return { previous };
+    },
+
+    onError: (_err, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(APPLICATIONS_KEY, context.previous);
+      }
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: APPLICATIONS_KEY });
+      queryClient.invalidateQueries({ queryKey: ["activityLog"] });
+    },
+  });
+}

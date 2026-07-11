@@ -5,6 +5,8 @@ import { ApplicationForm } from "../components/applications/ApplicationForm";
 import { ApplicationTable } from "../components/applications/ApplicationTable";
 import { FilterBar } from "../components/applications/FilterBar";
 import { SearchBar } from "../components/applications/SearchBar";
+import { ViewSwitcher } from "../components/applications/ViewSwitcher";
+import { KanbanBoard } from "../components/kanban/KanbanBoard";
 import { DEFAULT_SORT } from "../lib/applicationSort";
 import { useApplications, useDeleteApplication } from "../hooks/useApplications";
 import type { Application } from "../types";
@@ -18,30 +20,39 @@ export default function Applications() {
   const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
 
+  const view = searchParams.get("view") === "board" ? "board" : "table";
   const hasActiveFilters = searchParams.has("status") || searchParams.has("q");
 
-  const visibleApplications = useMemo(() => {
+  // Search applies in both views. Status filtering and sort only apply to
+  // Table view: Board view already groups cards by status (a status
+  // filter would just hide whole columns), and its card order is set by
+  // drag-and-drop, which a global sort would fight with.
+  const searchedApplications = useMemo(() => {
     if (!applications) return [];
 
-    const status = searchParams.get("status");
     const query = (searchParams.get("q") ?? "").trim().toLowerCase();
+    if (!query) return applications;
+
+    return applications.filter(
+      (application) =>
+        application.companyName.toLowerCase().includes(query) ||
+        application.roleTitle.toLowerCase().includes(query)
+    );
+  }, [applications, searchParams]);
+
+  const visibleApplications = useMemo(() => {
+    if (view === "board") return searchedApplications;
+
+    const status = searchParams.get("status");
     const [sortKey, sortDir] = (searchParams.get("sort") ?? DEFAULT_SORT).split("-") as [
       keyof Application,
       "asc" | "desc"
     ];
 
-    let result = applications;
+    let result = searchedApplications;
 
     if (status) {
       result = result.filter((application) => application.status === status);
-    }
-
-    if (query) {
-      result = result.filter(
-        (application) =>
-          application.companyName.toLowerCase().includes(query) ||
-          application.roleTitle.toLowerCase().includes(query)
-      );
     }
 
     return [...result].sort((a, b) => {
@@ -49,7 +60,7 @@ export default function Applications() {
       const bValue = String(b[sortKey] ?? "");
       return sortDir === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     });
-  }, [applications, searchParams]);
+  }, [searchedApplications, searchParams, view]);
 
   function openCreateForm() {
     setEditingApplication(undefined);
@@ -74,6 +85,9 @@ export default function Applications() {
     setPendingDelete(null);
   }
 
+  const hasAnyApplications = !isLoading && !isError && applications && applications.length > 0;
+  const hasNoResults = hasAnyApplications && visibleApplications.length === 0;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
@@ -87,11 +101,16 @@ export default function Applications() {
         </Button>
       </div>
 
-      {!isLoading && !isError && applications && applications.length > 0 && (
+      {hasAnyApplications && (
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <SearchBar />
-          <div className="sm:ml-auto sm:flex-1">
-            <FilterBar />
+          {view === "table" && (
+            <div className="sm:flex-1">
+              <FilterBar />
+            </div>
+          )}
+          <div className="sm:ml-auto">
+            <ViewSwitcher />
           </div>
         </div>
       )}
@@ -119,25 +138,25 @@ export default function Applications() {
         />
       )}
 
-      {!isLoading &&
-        !isError &&
-        applications &&
-        applications.length > 0 &&
-        visibleApplications.length === 0 && (
-          <EmptyState
-            title="No applications match your filters"
-            description="Try a different search or clear your filters to see everything."
-            actionLabel={hasActiveFilters ? "Clear filters" : undefined}
-            onAction={hasActiveFilters ? clearFilters : undefined}
-          />
-        )}
+      {hasNoResults && (
+        <EmptyState
+          title="No applications match your filters"
+          description="Try a different search or clear your filters to see everything."
+          actionLabel={hasActiveFilters ? "Clear filters" : undefined}
+          onAction={hasActiveFilters ? clearFilters : undefined}
+        />
+      )}
 
-      {!isLoading && !isError && visibleApplications.length > 0 && (
+      {!hasNoResults && hasAnyApplications && view === "table" && (
         <ApplicationTable
           applications={visibleApplications}
           onEdit={openEditForm}
           onDelete={(application) => setPendingDelete(application)}
         />
+      )}
+
+      {!hasNoResults && hasAnyApplications && view === "board" && (
+        <KanbanBoard applications={visibleApplications} onEdit={openEditForm} />
       )}
 
       <ApplicationForm
