@@ -1,17 +1,9 @@
-// src/components/dashboard/MomentumSparkline.tsx
 import React from "react";
 
 interface MomentumSparklineProps {
   className?: string;
 }
 
-/**
- * Static placeholder version of the momentum sparkline.
- * The real version (Phase 8) will plot the last 8 weeks of
- * activity_log data. For now this renders a fixed illustrative
- * shape in Ochre, just enough to be the signature visual on
- * the Login page ahead of that real data existing.
- */
 export const MomentumSparkline: React.FC<MomentumSparklineProps> = ({
   className,
 }) => {

@@ -1,4 +1,3 @@
-// src/context/auth-context.ts
 import { createContext } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 

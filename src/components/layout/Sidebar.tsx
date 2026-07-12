@@ -1,14 +1,8 @@
 import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  BriefcaseBusiness,
-  BarChart3,
-} from "lucide-react";
+import { LayoutDashboard, BriefcaseBusiness, BarChart3 } from "lucide-react";
 import clsx from "clsx";
 
 type SidebarProps = {
-  // Manual override, always icon-only regardless of breakpoint.
-  // Not wired to a toggle yet, useUIStore can drive this later.
   collapsed?: boolean;
 };
 
@@ -30,19 +24,13 @@ const navigation = [
   },
 ];
 
-export default function Sidebar({
-  collapsed = false,
-}: SidebarProps) {
+export default function Sidebar({ collapsed = false }: SidebarProps) {
   return (
     <>
-      {/* Desktop / tablet vertical sidebar. Hidden below md, icon-only
-          from md to lg, full width with labels at lg and up. Hidden
-          entirely below md in favor of the bottom tab bar. */}
-
       <aside
         className={clsx(
           "hidden md:flex md:h-screen md:flex-col border-r border-muted/20 bg-paper transition-all duration-300",
-          collapsed ? "md:w-20" : "md:w-20 lg:w-64"
+          collapsed ? "md:w-20" : "md:w-20 lg:w-64",
         )}
       >
         {/* Logo */}
@@ -78,7 +66,7 @@ export default function Sidebar({
 
                     isActive
                       ? "bg-primary text-white"
-                      : "text-muted hover:bg-surface hover:text-ink"
+                      : "text-muted hover:bg-surface hover:text-ink",
                   )
                 }
               >
@@ -106,7 +94,7 @@ export default function Sidebar({
               className={({ isActive }) =>
                 clsx(
                   "flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-muted"
+                  isActive ? "text-primary" : "text-muted",
                 )
               }
             >

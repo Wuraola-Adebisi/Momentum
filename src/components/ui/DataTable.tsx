@@ -1,14 +1,5 @@
 import React, { useState } from "react";
 
-/**
- * `Column<T>` and `DataTable<T>` use a generic type parameter, `T`.
- * A generic is a placeholder type filled in at the call site: instead of
- * hardcoding "this table holds Application rows," the component says
- * "this table holds whatever type of row you give it," and TypeScript
- * fills in T from the `data` prop you pass. That's what replaces the old
- * `Record<string, any>[]` typing, columns and rows are now checked
- * against the real shape of the data instead of "any object goes."
- */
 export interface Column<T> {
   key: keyof T;
   header: string;
@@ -20,15 +11,18 @@ export interface Column<T> {
 interface DataTableProps<T> {
   data: T[];
   columns: Column<T>[];
-  /** Optional row click handler, used to open the application detail drawer later. */
   onRowClick?: (row: T) => void;
-  /** Stable row key, falls back to array index if not provided. */
   getRowId?: (row: T) => string;
 }
 
 type SortDirection = "asc" | "desc";
 
-export function DataTable<T>({ data, columns, onRowClick, getRowId }: DataTableProps<T>) {
+export function DataTable<T>({
+  data,
+  columns,
+  onRowClick,
+  getRowId,
+}: DataTableProps<T>) {
   const [sortKey, setSortKey] = useState<keyof T | null>(null);
   const [direction, setDirection] = useState<SortDirection>("asc");
 

@@ -1,16 +1,11 @@
 import React from "react";
 import clsx from "clsx";
 
-interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({
-  className,
-  error,
-  ...props
-}) => {
+export const Input: React.FC<InputProps> = ({ className, error, ...props }) => {
   return (
     <input
       {...props}
@@ -20,7 +15,7 @@ export const Input: React.FC<InputProps> = ({
         error
           ? "border-status-rejected focus:border-status-rejected"
           : "border-muted/30 focus:border-primary",
-        className
+        className,
       )}
     />
   );

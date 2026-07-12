@@ -14,8 +14,7 @@ export const Card: React.FC<CardProps> = ({
   className,
   ...props
 }) => {
-  const base =
-    "rounded-md border border-muted/20 bg-surface transition";
+  const base = "rounded-md border border-muted/20 bg-surface transition";
 
   const paddingStyles = {
     sm: "p-3",
@@ -30,7 +29,7 @@ export const Card: React.FC<CardProps> = ({
         base,
         paddingStyles[padding],
         hoverable && "hover:shadow-sm cursor-pointer",
-        className
+        className,
       )}
     >
       {children}

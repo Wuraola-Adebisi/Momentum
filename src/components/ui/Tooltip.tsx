@@ -6,10 +6,7 @@ interface TooltipProps {
   children: React.ReactNode;
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({
-  content,
-  children,
-}) => {
+export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -25,7 +22,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <div
           className={clsx(
             "absolute -top-8 left-1/2 -translate-x-1/2",
-            "rounded bg-ink px-2 py-1 text-xs text-white"
+            "rounded bg-ink px-2 py-1 text-xs text-white",
           )}
         >
           {content}

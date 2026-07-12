@@ -6,8 +6,7 @@ interface Option {
   value: string;
 }
 
-interface SelectProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options: Option[];
   error?: boolean;
 }
@@ -27,7 +26,7 @@ export const Select: React.FC<SelectProps> = ({
         error
           ? "border-status-rejected focus:border-status-rejected"
           : "border-muted/30 focus:border-primary",
-        className
+        className,
       )}
     >
       {options.map((opt) => (

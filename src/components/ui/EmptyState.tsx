@@ -19,15 +19,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className={clsx("text-center py-12", className)}>
-      <h3 className="text-lg font-semibold text-ink">
-        {title}
-      </h3>
+      <h3 className="text-lg font-semibold text-ink">{title}</h3>
 
-      {description && (
-        <p className="text-sm text-muted mt-1">
-          {description}
-        </p>
-      )}
+      {description && <p className="text-sm text-muted mt-1">{description}</p>}
 
       {actionLabel && onAction && (
         <div className="mt-4">

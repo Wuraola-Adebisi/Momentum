@@ -18,25 +18,13 @@ export const Field: React.FC<FieldProps> = ({
 }) => {
   return (
     <div className={clsx("flex flex-col gap-1", className)}>
-      {label && (
-        <label className="text-sm font-medium text-ink">
-          {label}
-        </label>
-      )}
+      {label && <label className="text-sm font-medium text-ink">{label}</label>}
 
       {children}
 
-      {error && (
-        <span className="text-xs text-status-rejected">
-          {error}
-        </span>
-      )}
+      {error && <span className="text-xs text-status-rejected">{error}</span>}
 
-      {!error && hint && (
-        <span className="text-xs text-muted">
-          {hint}
-        </span>
-      )}
+      {!error && hint && <span className="text-xs text-muted">{hint}</span>}
     </div>
   );
 };

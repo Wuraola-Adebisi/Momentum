@@ -20,9 +20,7 @@ export function TablePreview() {
           key={row.company}
           className="flex items-center justify-between border-b border-muted/10 py-2 last:border-b-0"
         >
-          <span className="text-sm font-semibold text-ink">
-            {row.company}
-          </span>
+          <span className="text-sm font-semibold text-ink">{row.company}</span>
           <Badge variant={row.variant}>
             {row.variant.charAt(0).toUpperCase() + row.variant.slice(1)}
           </Badge>

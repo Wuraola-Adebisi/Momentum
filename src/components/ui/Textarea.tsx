@@ -1,8 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: boolean;
 }
 
@@ -20,7 +19,7 @@ export const Textarea: React.FC<TextareaProps> = ({
         error
           ? "border-status-rejected focus:border-status-rejected"
           : "border-muted/30 focus:border-primary",
-        className
+        className,
       )}
     />
   );

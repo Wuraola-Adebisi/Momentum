@@ -1,9 +1,16 @@
-// src/hooks/useApplications.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
-import { mapApplication, toApplicationInsert, toApplicationUpdate } from "../lib/mappers";
-import type { Application, CreateApplicationInput, UpdateApplicationInput } from "../types";
+import {
+  mapApplication,
+  toApplicationInsert,
+  toApplicationUpdate,
+} from "../lib/mappers";
+import type {
+  Application,
+  CreateApplicationInput,
+  UpdateApplicationInput,
+} from "../types";
 
 const APPLICATIONS_KEY = ["applications"] as const;
 
@@ -28,7 +35,8 @@ export function useCreateApplication() {
 
   return useMutation({
     mutationFn: async (input: CreateApplicationInput): Promise<Application> => {
-      if (!user) throw new Error("You must be signed in to add an application.");
+      if (!user)
+        throw new Error("You must be signed in to add an application.");
 
       const { data, error } = await supabase
         .from("applications")
@@ -82,7 +90,10 @@ export function useDeleteApplication() {
 
   return useMutation({
     mutationFn: async (id: string): Promise<string> => {
-      const { error } = await supabase.from("applications").delete().eq("id", id);
+      const { error } = await supabase
+        .from("applications")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       return id;
     },
@@ -98,13 +109,6 @@ interface UpdateStatusInput {
   position: number;
 }
 
-/**
- * Moves a card to a new status/position, used by the Kanban board's
- * drag-and-drop and the mobile status-picker fallback. Updates the local
- * cache immediately (`onMutate`) so the card appears to move instantly,
- * then rolls back to the previous cache (`onError`) if the Supabase write
- * fails, rather than leaving the UI showing a move that didn't happen.
- */
 export function useUpdateApplicationStatus() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -130,12 +134,15 @@ export function useUpdateApplicationStatus() {
 
     onMutate: async ({ id, status, position }) => {
       await queryClient.cancelQueries({ queryKey: APPLICATIONS_KEY });
-      const previous = queryClient.getQueryData<Application[]>(APPLICATIONS_KEY);
+      const previous =
+        queryClient.getQueryData<Application[]>(APPLICATIONS_KEY);
 
       queryClient.setQueryData<Application[]>(APPLICATIONS_KEY, (old) =>
         old?.map((application) =>
-          application.id === id ? { ...application, status, position } : application
-        )
+          application.id === id
+            ? { ...application, status, position }
+            : application,
+        ),
       );
 
       return { previous };

@@ -1,10 +1,3 @@
-// src/lib/applicationSort.ts
-
-/**
- * Each option pairs a friendly label with a sortable column key and
- * direction, joined with a dash (e.g. "appliedDate-desc") so the whole
- * choice fits in a single URL param instead of two.
- */
 export const SORT_OPTIONS = [
   { value: "appliedDate-desc", label: "Newest first" },
   { value: "appliedDate-asc", label: "Oldest first" },

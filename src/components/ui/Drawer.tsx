@@ -18,14 +18,14 @@ export const Drawer: React.FC<DrawerProps> = ({
     <div
       className={clsx(
         "fixed inset-0 z-50",
-        open ? "pointer-events-auto" : "pointer-events-none"
+        open ? "pointer-events-auto" : "pointer-events-none",
       )}
     >
       {/* overlay */}
       <div
         className={clsx(
           "absolute inset-0 bg-black/40 transition-opacity",
-          open ? "opacity-100" : "opacity-0"
+          open ? "opacity-100" : "opacity-0",
         )}
         onClick={onClose}
       />
@@ -38,8 +38,8 @@ export const Drawer: React.FC<DrawerProps> = ({
           open
             ? "translate-x-0"
             : side === "right"
-            ? "translate-x-full"
-            : "-translate-x-full"
+              ? "translate-x-full"
+              : "-translate-x-full",
         )}
       >
         {children}

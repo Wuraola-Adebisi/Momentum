@@ -37,16 +37,16 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
 
   const columns = useMemo(() => groupByStatus(applications), [applications]);
 
-  const [activeApplication, setActiveApplication] = useState<Application | null>(null);
-  const [statusPickerFor, setStatusPickerFor] = useState<Application | null>(null);
+  const [activeApplication, setActiveApplication] =
+    useState<Application | null>(null);
+  const [statusPickerFor, setStatusPickerFor] = useState<Application | null>(
+    null,
+  );
 
-  // A short drag distance threshold before a drag "starts" lets a plain
-  // click still register as a click instead of always being swallowed by
-  // the drag sensor.
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 8 },
-    })
+    }),
   );
 
   function handleDragStart(event: DragStartEvent) {
@@ -70,29 +70,50 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
     const overIsColumn = STATUS_VALUES.has(overId);
     const targetStatus: ApplicationStatus = overIsColumn
       ? (overId as ApplicationStatus)
-      : applications.find((app) => app.id === overId)?.status ?? dragged.status;
+      : (applications.find((app) => app.id === overId)?.status ??
+        dragged.status);
 
-    const targetColumnCards = columns[targetStatus].filter((app) => app.id !== draggedId);
+    const targetColumnCards = columns[targetStatus].filter(
+      (app) => app.id !== draggedId,
+    );
 
     const overIndex = overIsColumn
       ? targetColumnCards.length
       : targetColumnCards.findIndex((app) => app.id === overId);
 
-    const destinationIndex = overIndex === -1 ? targetColumnCards.length : overIndex;
-    const newPosition = computeDropPosition(targetColumnCards, destinationIndex);
+    const destinationIndex =
+      overIndex === -1 ? targetColumnCards.length : overIndex;
+    const newPosition = computeDropPosition(
+      targetColumnCards,
+      destinationIndex,
+    );
 
-    if (targetStatus === dragged.status && newPosition === dragged.position) return;
+    if (targetStatus === dragged.status && newPosition === dragged.position)
+      return;
 
-    updateStatus.mutate({ id: dragged.id, status: targetStatus, position: newPosition });
+    updateStatus.mutate({
+      id: dragged.id,
+      status: targetStatus,
+      position: newPosition,
+    });
   }
 
   function handleStatusPick(status: ApplicationStatus) {
     if (!statusPickerFor) return;
 
-    const targetColumnCards = columns[status].filter((app) => app.id !== statusPickerFor.id);
-    const newPosition = computeDropPosition(targetColumnCards, targetColumnCards.length);
+    const targetColumnCards = columns[status].filter(
+      (app) => app.id !== statusPickerFor.id,
+    );
+    const newPosition = computeDropPosition(
+      targetColumnCards,
+      targetColumnCards.length,
+    );
 
-    updateStatus.mutate({ id: statusPickerFor.id, status, position: newPosition });
+    updateStatus.mutate({
+      id: statusPickerFor.id,
+      status,
+      position: newPosition,
+    });
     setStatusPickerFor(null);
   }
 
@@ -104,7 +125,7 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-5 overflow-x-auto px-1 pb-4">
           {COLUMNS.map(({ status, label }) => (
             <KanbanColumn
               key={status}
@@ -121,7 +142,11 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
 
         <DragOverlay>
           {activeApplication && (
-            <KanbanCard application={activeApplication} isMobile={false} dragOverlay />
+            <KanbanCard
+              application={activeApplication}
+              isMobile={false}
+              dragOverlay
+            />
           )}
         </DragOverlay>
       </DndContext>

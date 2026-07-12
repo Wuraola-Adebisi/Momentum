@@ -8,7 +8,10 @@ import { SearchBar } from "../components/applications/SearchBar";
 import { ViewSwitcher } from "../components/applications/ViewSwitcher";
 import { KanbanBoard } from "../components/kanban/KanbanBoard";
 import { DEFAULT_SORT } from "../lib/applicationSort";
-import { useApplications, useDeleteApplication } from "../hooks/useApplications";
+import {
+  useApplications,
+  useDeleteApplication,
+} from "../hooks/useApplications";
 import type { Application } from "../types";
 
 export default function Applications() {
@@ -17,16 +20,14 @@ export default function Applications() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [formOpen, setFormOpen] = useState(false);
-  const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
+  const [editingApplication, setEditingApplication] = useState<
+    Application | undefined
+  >(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
 
   const view = searchParams.get("view") === "board" ? "board" : "table";
   const hasActiveFilters = searchParams.has("status") || searchParams.has("q");
 
-  // Search applies in both views. Status filtering and sort only apply to
-  // Table view: Board view already groups cards by status (a status
-  // filter would just hide whole columns), and its card order is set by
-  // drag-and-drop, which a global sort would fight with.
   const searchedApplications = useMemo(() => {
     if (!applications) return [];
 
@@ -36,7 +37,7 @@ export default function Applications() {
     return applications.filter(
       (application) =>
         application.companyName.toLowerCase().includes(query) ||
-        application.roleTitle.toLowerCase().includes(query)
+        application.roleTitle.toLowerCase().includes(query),
     );
   }, [applications, searchParams]);
 
@@ -44,10 +45,9 @@ export default function Applications() {
     if (view === "board") return searchedApplications;
 
     const status = searchParams.get("status");
-    const [sortKey, sortDir] = (searchParams.get("sort") ?? DEFAULT_SORT).split("-") as [
-      keyof Application,
-      "asc" | "desc"
-    ];
+    const [sortKey, sortDir] = (searchParams.get("sort") ?? DEFAULT_SORT).split(
+      "-",
+    ) as [keyof Application, "asc" | "desc"];
 
     let result = searchedApplications;
 
@@ -58,7 +58,9 @@ export default function Applications() {
     return [...result].sort((a, b) => {
       const aValue = String(a[sortKey] ?? "");
       const bValue = String(b[sortKey] ?? "");
-      return sortDir === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      return sortDir === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     });
   }, [searchedApplications, searchParams, view]);
 
@@ -85,15 +87,20 @@ export default function Applications() {
     setPendingDelete(null);
   }
 
-  const hasAnyApplications = !isLoading && !isError && applications && applications.length > 0;
+  const hasAnyApplications =
+    !isLoading && !isError && applications && applications.length > 0;
   const hasNoResults = hasAnyApplications && visibleApplications.length === 0;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold text-ink">Applications</h1>
-          <p className="text-muted mt-1">Track every role you've applied to in one place.</p>
+          <h1 className="text-3xl font-display font-bold text-ink">
+            Applications
+          </h1>
+          <p className="text-muted mt-1">
+            Track every role you've applied to in one place.
+          </p>
         </div>
 
         <Button variant="accent" onClick={openCreateForm}>
@@ -103,15 +110,15 @@ export default function Applications() {
 
       {hasAnyApplications && (
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-          <SearchBar />
+          <div className="flex items-center gap-3">
+            <SearchBar />
+            <ViewSwitcher />
+          </div>
           {view === "table" && (
-            <div className="sm:flex-1">
+            <div className="sm:ml-auto">
               <FilterBar />
             </div>
           )}
-          <div className="sm:ml-auto">
-            <ViewSwitcher />
-          </div>
         </div>
       )}
 
@@ -125,7 +132,9 @@ export default function Applications() {
 
       {isError && (
         <p className="text-sm text-status-rejected">
-          {error instanceof Error ? error.message : "Couldn't load your applications. Try refreshing."}
+          {error instanceof Error
+            ? error.message
+            : "Couldn't load your applications. Try refreshing."}
         </p>
       )}
 
@@ -165,15 +174,27 @@ export default function Applications() {
         application={editingApplication}
       />
 
-      <Modal open={pendingDelete !== null} onClose={() => setPendingDelete(null)}>
+      <Modal
+        open={pendingDelete !== null}
+        onClose={() => setPendingDelete(null)}
+      >
         <div className="space-y-4">
-          <h2 className="text-lg font-display font-semibold text-ink">Delete application</h2>
+          <h2 className="text-lg font-display font-semibold text-ink">
+            Delete application
+          </h2>
 
           <p className="text-sm text-muted">
             {pendingDelete && (
               <>
-                Delete the application for <span className="text-ink font-medium">{pendingDelete.roleTitle}</span> at{" "}
-                <span className="text-ink font-medium">{pendingDelete.companyName}</span>? This can't be undone.
+                Delete the application for{" "}
+                <span className="text-ink font-medium">
+                  {pendingDelete.roleTitle}
+                </span>{" "}
+                at{" "}
+                <span className="text-ink font-medium">
+                  {pendingDelete.companyName}
+                </span>
+                ? This can't be undone.
               </>
             )}
           </p>
@@ -182,7 +203,11 @@ export default function Applications() {
             <Button variant="ghost" onClick={() => setPendingDelete(null)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={confirmDelete} loading={deleteApplication.isPending}>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              loading={deleteApplication.isPending}
+            >
               Delete
             </Button>
           </div>

@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
@@ -13,11 +12,8 @@ type Mode = "login" | "signup";
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
 
-  // The homepage's "Get started" buttons link here with ?mode=signup so
-  // they land on account creation instead of sign in. Any other value
-  // (or none) falls back to login.
   const [mode, setMode] = useState<Mode>(
-    searchParams.get("mode") === "signup" ? "signup" : "login"
+    searchParams.get("mode") === "signup" ? "signup" : "login",
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,8 +76,6 @@ export default function LoginPage() {
     if (error) {
       setError(error.message);
     }
-    // On success, Supabase redirects the browser away from this page,
-    // so there is nothing else to do here.
   }
 
   function toggleMode() {
@@ -93,13 +87,14 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-paper px-6 py-12">
       <div className="w-full max-w-sm">
-
         <p className="text-center font-display text-base font-bold text-ink mb-10">
           Momentum
         </p>
 
         <h1 className="text-center font-display text-2xl font-bold text-ink mb-2">
-          {mode === "login" ? "Let's find your next role" : "Start your momentum"}
+          {mode === "login"
+            ? "Let's find your next role"
+            : "Start your momentum"}
         </h1>
 
         <p className="text-center text-sm text-muted mb-8">
@@ -108,8 +103,11 @@ export default function LoginPage() {
             : "Track every application, interview, and offer in one place."}
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4"
+          noValidate
+        >
           <Field label="Email">
             <Input
               type="email"
@@ -125,7 +123,9 @@ export default function LoginPage() {
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                autoComplete={
+                  mode === "login" ? "current-password" : "new-password"
+                }
                 required
                 minLength={6}
                 value={password}
@@ -169,10 +169,9 @@ export default function LoginPage() {
             {loading
               ? "Please wait..."
               : mode === "login"
-              ? "Sign in"
-              : "Create account"}
+                ? "Sign in"
+                : "Create account"}
           </Button>
-
         </form>
 
         <div className="flex items-center gap-3 text-xs text-muted my-6">
@@ -208,7 +207,6 @@ export default function LoginPage() {
             {mode === "login" ? "Create an account" : "Sign in instead"}
           </button>
         </p>
-
       </div>
     </div>
   );

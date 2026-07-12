@@ -1,11 +1,14 @@
-// src/context/AuthContext.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { AuthContext } from "./auth-context";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<import("@supabase/supabase-js").User | null>(null);
-  const [session, setSession] = useState<import("@supabase/supabase-js").Session | null>(null);
+  const [user, setUser] = useState<import("@supabase/supabase-js").User | null>(
+    null,
+  );
+  const [session, setSession] = useState<
+    import("@supabase/supabase-js").Session | null
+  >(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-      }
+      },
     );
 
     return () => {

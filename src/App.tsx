@@ -67,10 +67,7 @@ function DesignSystem() {
       </Card>
 
       <Card>
-        <EmptyState
-          title="No data"
-          description="This is a preview state"
-        />
+        <EmptyState title="No data" description="This is a preview state" />
       </Card>
 
       <Card>
@@ -106,37 +103,25 @@ function DesignSystem() {
       <Card>
         <h2 className="mb-3 font-semibold">Modal</h2>
 
-        <Button onClick={() => setModalOpen(true)}>
-          Open modal
-        </Button>
+        <Button onClick={() => setModalOpen(true)}>Open modal</Button>
 
-        <Modal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-        >
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
           <h3 className="mb-2 font-semibold">Modal title</h3>
 
           <p className="mb-4 text-sm text-muted">
             This is a preview of the Modal primitive.
           </p>
 
-          <Button onClick={() => setModalOpen(false)}>
-            Close
-          </Button>
+          <Button onClick={() => setModalOpen(false)}>Close</Button>
         </Modal>
       </Card>
 
       <Card>
         <h2 className="mb-3 font-semibold">Drawer</h2>
 
-        <Button onClick={() => setDrawerOpen(true)}>
-          Open drawer
-        </Button>
+        <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
 
-        <Drawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
+        <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           <div className="p-6">
             <h3 className="mb-2 font-semibold">Drawer title</h3>
 
@@ -144,9 +129,7 @@ function DesignSystem() {
               This is a preview of the Drawer primitive.
             </p>
 
-            <Button onClick={() => setDrawerOpen(false)}>
-              Close
-            </Button>
+            <Button onClick={() => setDrawerOpen(false)}>Close</Button>
           </div>
         </Drawer>
       </Card>

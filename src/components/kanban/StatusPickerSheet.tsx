@@ -14,12 +14,18 @@ const STATUS_OPTIONS: { label: string; value: ApplicationStatus }[] = [
   { label: "Rejected", value: "rejected" },
 ];
 
-export function StatusPickerSheet({ application, onClose, onSelect }: StatusPickerSheetProps) {
+export function StatusPickerSheet({
+  application,
+  onClose,
+  onSelect,
+}: StatusPickerSheetProps) {
   return (
     <Modal open={application !== null} onClose={onClose}>
       <div className="space-y-4">
         <div>
-          <h2 className="text-lg font-display font-semibold text-ink">Move application</h2>
+          <h2 className="text-lg font-display font-semibold text-ink">
+            Move application
+          </h2>
           {application && (
             <p className="text-sm text-muted mt-1">
               {application.roleTitle} at {application.companyName}
@@ -31,7 +37,9 @@ export function StatusPickerSheet({ application, onClose, onSelect }: StatusPick
           {STATUS_OPTIONS.map((option) => (
             <Button
               key={option.value}
-              variant={application?.status === option.value ? "accent" : "secondary"}
+              variant={
+                application?.status === option.value ? "accent" : "secondary"
+              }
               className="w-full justify-start"
               disabled={application?.status === option.value}
               onClick={() => onSelect(option.value)}
