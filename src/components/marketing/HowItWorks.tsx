@@ -1,4 +1,5 @@
-// src/components/marketing/HowItWorks.tsx
+import { SECTION_PADDING_X, SECTION_PADDING_Y_SM } from "./layout";
+
 const steps = [
   {
     number: "01",
@@ -21,7 +22,7 @@ export function HowItWorks() {
   return (
     <div
       id="how-it-works"
-      className="bg-paper px-6 py-16 sm:px-8 md:px-12 md:py-20 lg:px-16"
+      className={`bg-surface ${SECTION_PADDING_X} ${SECTION_PADDING_Y_SM}`}
     >
       <div className="mx-auto w-full max-w-content">
         <h2 className="text-center font-display text-xl font-bold text-ink md:text-2xl">

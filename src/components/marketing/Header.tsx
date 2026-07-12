@@ -1,10 +1,14 @@
-// src/components/marketing/Header.tsx
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button";
+import { SECTION_PADDING_X } from "./layout";
+
+const REPO_URL = "https://github.com/Wuraola-Adebisi/Momentum";
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between px-6 py-5 sm:px-8 md:px-12 lg:px-16">
+    <header
+      className={`sticky top-0 z-50 flex items-center justify-between border-b border-muted/10 bg-paper/85 py-3.5 backdrop-blur-md xl:py-4 ${SECTION_PADDING_X}`}
+    >
       <Link
         to="/"
         onClick={(e) => {
@@ -21,24 +25,35 @@ export function Header() {
         Momentum
       </Link>
 
-      <div className="flex items-center gap-4 md:gap-6">
+      <nav className="hidden items-center gap-6 sm:flex md:gap-8">
         <a
           href="#features"
-          className="hidden text-sm text-muted transition-colors hover:text-ink sm:inline"
+          className="text-sm text-muted transition-colors hover:text-ink"
         >
           Features
         </a>
 
         <a
           href="#how-it-works"
-          className="hidden text-sm text-muted transition-colors hover:text-ink sm:inline"
+          className="text-sm text-muted transition-colors hover:text-ink"
         >
           How it works
         </a>
 
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm text-muted transition-colors hover:text-ink"
+        >
+          Source
+        </a>
+      </nav>
+
+      <div className="flex items-center gap-3 md:gap-4">
         <Link
           to="/login"
-          className="text-sm text-muted transition-colors hover:text-ink"
+          className="hidden text-sm text-muted transition-colors hover:text-ink sm:inline"
         >
           Sign in
         </Link>
