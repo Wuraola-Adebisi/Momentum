@@ -1,6 +1,5 @@
 import { Header } from "../components/marketing/Header";
 import { Hero } from "../components/marketing/Hero";
-import { ProblemFraming } from "../components/marketing/ProblemFraming";
 import { WhyMomentum } from "../components/marketing/WhyMomentum";
 import { ShowcaseTabs } from "../components/marketing/ShowcaseTabs";
 import { Pillars } from "../components/marketing/Pillars";
@@ -13,7 +12,6 @@ export default function Homepage() {
     <div className="min-h-screen bg-paper">
       <Header />
       <Hero />
-      <ProblemFraming />
       <WhyMomentum />
       <ShowcaseTabs />
       <Pillars />

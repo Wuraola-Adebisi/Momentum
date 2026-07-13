@@ -1,4 +1,3 @@
-// src/components/marketing/Pillars.tsx
 import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout";
 
 const PILLARS = [
@@ -33,9 +32,12 @@ export function Pillars() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 divide-y divide-muted/10 overflow-hidden rounded-2xl border border-muted/10 bg-surface md:mt-16 md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div className="mt-14 grid grid-cols-1 gap-4 md:mt-16 md:grid-cols-3">
           {PILLARS.map((pillar) => (
-            <div key={pillar.phrase} className="p-8">
+            <div
+              key={pillar.phrase}
+              className="rounded-2xl border border-muted/10 bg-surface p-8"
+            >
               <p className="font-display text-lg font-bold text-ink">
                 {pillar.phrase}
               </p>
