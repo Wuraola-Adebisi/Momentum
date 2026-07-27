@@ -1,3 +1,4 @@
+// src/lib/mappers.ts
 import type {
   Tables,
   TablesInsert,
@@ -13,11 +14,13 @@ import type {
   Interview,
   CreateInterviewInput,
   InterviewType,
+  ActivityLogEntry,
 } from "../types";
 
 type ApplicationRow = Tables<"applications">;
 type NoteRow = Tables<"notes">;
 type InterviewRow = Tables<"interviews">;
+type ActivityLogRow = Tables<"activity_log">;
 
 export function mapApplication(row: ApplicationRow): Application {
   return {
@@ -110,5 +113,15 @@ export function toInterviewInsert(
     interview_date: input.interviewDate,
     interview_type: input.interviewType,
     notes: input.notes || null,
+  };
+}
+
+export function mapActivityLog(row: ActivityLogRow): ActivityLogEntry {
+  return {
+    id: row.id,
+    applicationId: row.application_id,
+    actionType: row.action_type as ActivityLogEntry["actionType"],
+    description: row.description,
+    createdAt: row.created_at ?? "",
   };
 }
