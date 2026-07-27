@@ -182,6 +182,8 @@ export default function Applications() {
         <KanbanBoard
           applications={visibleApplications}
           onOpenDetail={openDetail}
+          onEdit={openEditForm}
+          onDelete={(application) => setPendingDelete(application)}
         />
       )}
 
