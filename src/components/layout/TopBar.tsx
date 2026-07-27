@@ -1,13 +1,14 @@
 import { Search, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import { Avatar } from "../ui/Avatar";
 
 export default function TopBar() {
+  const navigate = useNavigate();
+
   return (
     <header className="flex h-16 items-center justify-between border-b border-muted/20 bg-paper px-4 md:px-8">
-      {/* Search */}
-
       <div className="relative w-full max-w-[10rem] sm:max-w-xs md:max-w-md">
         <Search
           size={18}
@@ -17,10 +18,11 @@ export default function TopBar() {
         <Input placeholder="Search applications..." className="pl-10" />
       </div>
 
-      {/* Actions */}
-
       <div className="ml-4 flex items-center gap-2 md:ml-8 md:gap-4">
-        <Button variant="accent">
+        <Button
+          variant="accent"
+          onClick={() => navigate("/applications?new=true")}
+        >
           <Plus size={18} />
           <span className="hidden sm:inline">Add Application</span>
         </Button>

@@ -21,12 +21,23 @@ export default function Applications() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [formOpen, setFormOpen] = useState(false);
-  const [editingApplication, setEditingApplication] = useState<
+  const [editingApplication, setEditingApplication] = useState
     Application | undefined
   >(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
   const [detailApplication, setDetailApplication] =
     useState<Application | null>(null);
+
+  const newParam = searchParams.get("new");
+  const [prevNewParam, setPrevNewParam] = useState(newParam);
+
+  if (newParam !== prevNewParam) {
+    setPrevNewParam(newParam);
+    if (newParam === "true") {
+      setEditingApplication(undefined);
+      setFormOpen(true);
+    }
+  }
 
   const view = searchParams.get("view") === "board" ? "board" : "table";
   const hasActiveFilters = searchParams.has("status") || searchParams.has("q");
@@ -79,6 +90,16 @@ export default function Applications() {
 
   function openDetail(application: Application) {
     setDetailApplication(application);
+  }
+
+  function closeForm() {
+    setFormOpen(false);
+
+    if (searchParams.get("new")) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("new");
+      setSearchParams(next, { replace: true });
+    }
   }
 
   function editFromDetail(application: Application) {
@@ -197,7 +218,7 @@ export default function Applications() {
 
       <ApplicationForm
         open={formOpen}
-        onClose={() => setFormOpen(false)}
+        onClose={closeForm}
         application={editingApplication}
       />
 
