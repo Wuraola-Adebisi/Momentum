@@ -6,9 +6,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<import("@supabase/supabase-js").User | null>(
     null,
   );
-  const [session, setSession] = useState<
-    import("@supabase/supabase-js").Session | null
-  >(null);
+ const [session, setSession] = useState<import("@supabase/supabase-js").Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

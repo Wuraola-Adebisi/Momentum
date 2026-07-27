@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button, Skeleton, EmptyState, Modal } from "../components/ui";
+import { ApplicationDetail } from "../components/applications/ApplicationDetail";
 import { ApplicationForm } from "../components/applications/ApplicationForm";
 import { ApplicationTable } from "../components/applications/ApplicationTable";
 import { FilterBar } from "../components/applications/FilterBar";
@@ -24,6 +25,8 @@ export default function Applications() {
     Application | undefined
   >(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
+  const [detailApplication, setDetailApplication] =
+    useState<Application | null>(null);
 
   const view = searchParams.get("view") === "board" ? "board" : "table";
   const hasActiveFilters = searchParams.has("status") || searchParams.has("q");
@@ -74,6 +77,20 @@ export default function Applications() {
     setFormOpen(true);
   }
 
+  function openDetail(application: Application) {
+    setDetailApplication(application);
+  }
+
+  function editFromDetail(application: Application) {
+    setDetailApplication(null);
+    openEditForm(application);
+  }
+
+  function deleteFromDetail(application: Application) {
+    setDetailApplication(null);
+    setPendingDelete(application);
+  }
+
   function clearFilters() {
     const next = new URLSearchParams(searchParams);
     next.delete("status");
@@ -109,16 +126,12 @@ export default function Applications() {
       </div>
 
       {hasAnyApplications && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <SearchBar />
             <ViewSwitcher />
           </div>
-          {view === "table" && (
-            <div className="sm:ml-auto">
-              <FilterBar />
-            </div>
-          )}
+          {view === "table" && <FilterBar />}
         </div>
       )}
 
@@ -159,14 +172,26 @@ export default function Applications() {
       {!hasNoResults && hasAnyApplications && view === "table" && (
         <ApplicationTable
           applications={visibleApplications}
+          onRowClick={openDetail}
           onEdit={openEditForm}
           onDelete={(application) => setPendingDelete(application)}
         />
       )}
 
       {!hasNoResults && hasAnyApplications && view === "board" && (
-        <KanbanBoard applications={visibleApplications} onEdit={openEditForm} />
+        <KanbanBoard
+          applications={visibleApplications}
+          onOpenDetail={openDetail}
+        />
       )}
+
+      <ApplicationDetail
+        application={detailApplication}
+        open={detailApplication !== null}
+        onClose={() => setDetailApplication(null)}
+        onEdit={editFromDetail}
+        onDelete={deleteFromDetail}
+      />
 
       <ApplicationForm
         open={formOpen}

@@ -1,9 +1,11 @@
+import { StickyNote } from "lucide-react";
 import { DataTable, Badge, Button } from "../ui";
 import type { Column } from "../ui";
 import type { Application, ApplicationStatus } from "../../types";
 
 interface ApplicationTableProps {
   applications: Application[];
+  onRowClick: (application: Application) => void;
   onEdit: (application: Application) => void;
   onDelete: (application: Application) => void;
 }
@@ -25,7 +27,12 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export function ApplicationTable({ applications, onEdit, onDelete }: ApplicationTableProps) {
+export function ApplicationTable({
+  applications,
+  onRowClick,
+  onEdit,
+  onDelete,
+}: ApplicationTableProps) {
   const columns: Column<Application>[] = [
     {
       key: "companyName",
@@ -41,13 +48,17 @@ export function ApplicationTable({ applications, onEdit, onDelete }: Application
       key: "status",
       header: "Status",
       sortable: true,
-      render: (row) => <Badge variant={row.status}>{STATUS_LABELS[row.status]}</Badge>,
+      render: (row) => (
+        <Badge variant={row.status}>{STATUS_LABELS[row.status]}</Badge>
+      ),
     },
     {
       key: "appliedDate",
       header: "Applied",
       sortable: true,
-      render: (row) => <span className="font-data">{formatDate(row.appliedDate)}</span>,
+      render: (row) => (
+        <span className="font-data">{formatDate(row.appliedDate)}</span>
+      ),
     },
     {
       key: "location",
@@ -60,7 +71,9 @@ export function ApplicationTable({ applications, onEdit, onDelete }: Application
       header: "Salary",
       sortable: true,
       render: (row) => (
-        <span className="font-data">{row.salaryRange ?? <span className="text-muted font-body">—</span>}</span>
+        <span className="font-data">
+          {row.salaryRange ?? <span className="text-muted font-body">—</span>}
+        </span>
       ),
     },
     {
@@ -68,6 +81,17 @@ export function ApplicationTable({ applications, onEdit, onDelete }: Application
       header: "",
       render: (row) => (
         <div className="flex gap-2 justify-end">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={(e) => {
+              e.stopPropagation();
+              onRowClick(row);
+            }}
+          >
+            <StickyNote size={14} className="mr-1.5" />
+            Notes
+          </Button>
           <Button
             size="sm"
             variant="ghost"
@@ -98,7 +122,7 @@ export function ApplicationTable({ applications, onEdit, onDelete }: Application
       data={applications}
       columns={columns}
       getRowId={(row) => row.id}
-      onRowClick={(row) => onEdit(row)}
+      onRowClick={(row) => onRowClick(row)}
     />
   );
 }

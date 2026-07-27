@@ -8,9 +8,16 @@ import type {
   ApplicationStatus,
   CreateApplicationInput,
   UpdateApplicationInput,
+  Note,
+  CreateNoteInput,
+  Interview,
+  CreateInterviewInput,
+  InterviewType,
 } from "../types";
 
 type ApplicationRow = Tables<"applications">;
+type NoteRow = Tables<"notes">;
+type InterviewRow = Tables<"interviews">;
 
 export function mapApplication(row: ApplicationRow): Application {
   return {
@@ -60,4 +67,48 @@ export function toApplicationUpdate(
   if (input.appliedDate !== undefined) update.applied_date = input.appliedDate;
 
   return update;
+}
+
+export function mapNote(row: NoteRow): Note {
+  return {
+    id: row.id,
+    applicationId: row.application_id,
+    content: row.content,
+    createdAt: row.created_at ?? "",
+  };
+}
+
+export function toNoteInsert(
+  input: CreateNoteInput,
+  userId: string,
+): TablesInsert<"notes"> {
+  return {
+    user_id: userId,
+    application_id: input.applicationId,
+    content: input.content,
+  };
+}
+
+export function mapInterview(row: InterviewRow): Interview {
+  return {
+    id: row.id,
+    applicationId: row.application_id,
+    interviewDate: row.interview_date,
+    interviewType: (row.interview_type as InterviewType | null) ?? "other",
+    notes: row.notes,
+    createdAt: row.created_at ?? "",
+  };
+}
+
+export function toInterviewInsert(
+  input: CreateInterviewInput,
+  userId: string,
+): TablesInsert<"interviews"> {
+  return {
+    user_id: userId,
+    application_id: input.applicationId,
+    interview_date: input.interviewDate,
+    interview_type: input.interviewType,
+    notes: input.notes || null,
+  };
 }

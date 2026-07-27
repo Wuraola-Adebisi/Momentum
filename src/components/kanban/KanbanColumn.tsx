@@ -12,12 +12,12 @@ interface KanbanColumnProps {
   applications: Application[];
   isMobile: boolean;
   onCardClick: (application: Application) => void;
+  onViewDetail: (application: Application) => void;
+  onEdit: (application: Application) => void;
+  onDelete: (application: Application) => void;
 }
 
-const STATUS_STYLES: Record<
-  ApplicationStatus,
-  { dot: string; header: string }
-> = {
+const STATUS_STYLES: Record<ApplicationStatus, { dot: string; header: string }> = {
   applied: { dot: "bg-status-applied", header: "border-status-applied" },
   interviewing: {
     dot: "bg-status-interviewing",
@@ -33,6 +33,9 @@ export function KanbanColumn({
   applications,
   isMobile,
   onCardClick,
+  onViewDetail,
+  onEdit,
+  onDelete,
 }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
   const styles = STATUS_STYLES[status];
@@ -65,6 +68,9 @@ export function KanbanColumn({
               application={application}
               isMobile={isMobile}
               onClick={() => onCardClick(application)}
+              onViewDetail={() => onViewDetail(application)}
+              onEdit={() => onEdit(application)}
+              onDelete={() => onDelete(application)}
             />
           ))}
         </SortableContext>

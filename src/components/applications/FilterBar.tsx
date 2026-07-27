@@ -37,7 +37,7 @@ export function FilterBar() {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+    <div className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-2">
         {STATUS_FILTERS.map((filter) => (
           <Button
@@ -51,13 +51,15 @@ export function FilterBar() {
         ))}
       </div>
 
-      <Select
-        value={activeSort}
-        onChange={(e) => setSort(e.target.value)}
-        options={SORT_OPTIONS.map(({ value, label }) => ({ value, label }))}
-        className="sm:ml-auto w-full sm:w-56"
-        aria-label="Sort applications"
-      />
+      <div className="flex justify-end">
+        <Select
+          value={activeSort}
+          onChange={(e) => setSort(e.target.value)}
+          options={SORT_OPTIONS.map(({ value, label }) => ({ value, label }))}
+          className="w-full sm:w-56"
+          aria-label="Sort applications"
+        />
+      </div>
     </div>
   );
 }

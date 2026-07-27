@@ -1,22 +1,21 @@
+import { MoreVertical } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Card } from "../ui";
-import type { Application, ApplicationStatus } from "../../types";
+import { Card, Dropdown } from "../ui";
+import type { Application } from "../../types";
 
 interface KanbanCardProps {
   application: Application;
   isMobile: boolean;
+  /** Card-body click/tap: opens the detail drawer on desktop, the status picker on mobile. */
   onClick?: () => void;
+  /** Kebab menu action, always opens the detail drawer regardless of platform. */
+  onViewDetail?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
   /** True only for the floating copy rendered inside DragOverlay. */
   dragOverlay?: boolean;
 }
-
-const STATUS_BORDER: Record<ApplicationStatus, string> = {
-  applied: "border-l-status-applied",
-  interviewing: "border-l-status-interviewing",
-  offer: "border-l-status-offer",
-  rejected: "border-l-status-rejected",
-};
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -28,6 +27,9 @@ export function KanbanCard({
   application,
   isMobile,
   onClick,
+  onViewDetail,
+  onEdit,
+  onDelete,
   dragOverlay = false,
 }: KanbanCardProps) {
   const {
@@ -50,6 +52,18 @@ export function KanbanCard({
         opacity: isDragging ? 0.4 : 1,
       };
 
+  const menuOptions = [
+    { label: "View details", value: "view" },
+    { label: "Edit", value: "edit" },
+    { label: "Delete", value: "delete" },
+  ];
+
+  function handleMenuSelect(value: string) {
+    if (value === "view") onViewDetail?.();
+    if (value === "edit") onEdit?.();
+    if (value === "delete") onDelete?.();
+  }
+
   return (
     <div
       ref={dragOverlay ? undefined : setNodeRef}
@@ -60,20 +74,39 @@ export function KanbanCard({
       <Card
         padding="md"
         onClick={onClick}
-        className={`border-l-4 ${STATUS_BORDER[application.status]} ${
+        className={
           dragOverlay
             ? "shadow-lg rotate-1"
             : isMobile
               ? "cursor-pointer hover:shadow-sm"
               : "cursor-grab active:cursor-grabbing hover:shadow-sm"
-        }`}
+        }
       >
-        <p className="font-body font-medium text-ink truncate">
-          {application.companyName}
-        </p>
-        <p className="text-sm text-muted truncate mt-0.5">
-          {application.roleTitle}
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="font-body font-medium text-ink truncate">
+              {application.companyName}
+            </p>
+            <p className="text-sm text-muted truncate mt-0.5">
+              {application.roleTitle}
+            </p>
+          </div>
+
+          {!dragOverlay && (onViewDetail || onEdit || onDelete) && (
+            <div onPointerDown={(e) => e.stopPropagation()}>
+              <Dropdown
+                align="right"
+                options={menuOptions}
+                onSelect={handleMenuSelect}
+                trigger={
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md text-muted hover:bg-muted/10 hover:text-ink transition">
+                    <MoreVertical size={16} />
+                  </span>
+                }
+              />
+            </div>
+          )}
+        </div>
 
         <div className="flex items-center justify-between pt-3">
           <span className="text-xs text-muted font-data">

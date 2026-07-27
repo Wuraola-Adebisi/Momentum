@@ -19,7 +19,10 @@ import type { Application, ApplicationStatus } from "../../types";
 
 interface KanbanBoardProps {
   applications: Application[];
+  /** Desktop card click opens the Application Detail drawer. */
+  onOpenDetail: (application: Application) => void;
   onEdit: (application: Application) => void;
+  onDelete: (application: Application) => void;
 }
 
 const COLUMNS: { status: ApplicationStatus; label: string }[] = [
@@ -31,7 +34,12 @@ const COLUMNS: { status: ApplicationStatus; label: string }[] = [
 
 const STATUS_VALUES = new Set<string>(COLUMNS.map((c) => c.status));
 
-export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
+export function KanbanBoard({
+  applications,
+  onOpenDetail,
+  onEdit,
+  onDelete,
+}: KanbanBoardProps) {
   const isMobile = useIsMobile();
   const updateStatus = useUpdateApplicationStatus();
 
@@ -64,8 +72,6 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
     const dragged = applications.find((app) => app.id === draggedId);
     if (!dragged) return;
 
-    // `over.id` is either another card's id, or a column's status value
-    // when dropped on the column itself (empty space, not on a card).
     const overId = String(over.id);
     const overIsColumn = STATUS_VALUES.has(overId);
     const targetStatus: ApplicationStatus = overIsColumn
@@ -134,8 +140,13 @@ export function KanbanBoard({ applications, onEdit }: KanbanBoardProps) {
               applications={columns[status]}
               isMobile={isMobile}
               onCardClick={(application) =>
-                isMobile ? setStatusPickerFor(application) : onEdit(application)
+                isMobile
+                  ? setStatusPickerFor(application)
+                  : onOpenDetail(application)
               }
+              onViewDetail={onOpenDetail}
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           ))}
         </div>
