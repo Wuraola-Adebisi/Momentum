@@ -21,9 +21,7 @@ export default function Applications() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [formOpen, setFormOpen] = useState(false);
-  const [editingApplication, setEditingApplication] = useState
-    Application | undefined
-  >(undefined);
+ const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
   const [detailApplication, setDetailApplication] =
     useState<Application | null>(null);
