@@ -7,7 +7,22 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Field } from "../components/ui/Field";
 
-type Mode = "login" | "signup";
+type Mode = "login" | "signup" | "reset";
+
+const HEADINGS: Record<Mode, { title: string; subtitle: string }> = {
+  login: {
+    title: "Let's find your next role",
+    subtitle: "Sign in to pick up where you left off.",
+  },
+  signup: {
+    title: "Start your momentum",
+    subtitle: "Track every application, interview, and offer in one place.",
+  },
+  reset: {
+    title: "Reset your password",
+    subtitle: "Enter your email and we'll send you a reset link.",
+  },
+};
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
@@ -47,7 +62,10 @@ export default function LoginPage() {
       if (data.session) {
         navigate("/dashboard");
       }
-    } else {
+      return;
+    }
+
+    if (mode === "signup") {
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -61,7 +79,22 @@ export default function LoginPage() {
       }
 
       setMessage("Check your email to confirm your account.");
+      return;
     }
+
+    // mode === "reset"
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setMessage("Check your email for a link to reset your password.");
   }
 
   async function handleOAuth(provider: "google" | "github") {
@@ -78,11 +111,13 @@ export default function LoginPage() {
     }
   }
 
-  function toggleMode() {
-    setMode(mode === "login" ? "signup" : "login");
+  function switchMode(next: Mode) {
+    setMode(next);
     setError(null);
     setMessage(null);
   }
+
+  const { title, subtitle } = HEADINGS[mode];
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-paper px-6 py-12">
@@ -92,16 +127,10 @@ export default function LoginPage() {
         </p>
 
         <h1 className="text-center font-display text-2xl font-bold text-ink mb-2">
-          {mode === "login"
-            ? "Let's find your next role"
-            : "Start your momentum"}
+          {title}
         </h1>
 
-        <p className="text-center text-sm text-muted mb-8">
-          {mode === "login"
-            ? "Sign in to pick up where you left off."
-            : "Track every application, interview, and offer in one place."}
-        </p>
+        <p className="text-center text-sm text-muted mb-8">{subtitle}</p>
 
         <form
           onSubmit={handleSubmit}
@@ -119,33 +148,36 @@ export default function LoginPage() {
             />
           </Field>
 
-          <Field label="Password">
-            <div className="relative">
-              <Input
-                type={showPassword ? "text" : "password"}
-                autoComplete={
-                  mode === "login" ? "current-password" : "new-password"
-                }
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pr-10"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
-          </Field>
+          {mode !== "reset" && (
+            <Field label="Password">
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  autoComplete={
+                    mode === "login" ? "current-password" : "new-password"
+                  }
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </Field>
+          )}
 
           {mode === "login" && (
             <button
               type="button"
+              onClick={() => switchMode("reset")}
               className="self-end -mt-2 text-xs text-primary font-medium"
             >
               Forgot password?
@@ -170,42 +202,78 @@ export default function LoginPage() {
               ? "Please wait..."
               : mode === "login"
                 ? "Sign in"
-                : "Create account"}
+                : mode === "signup"
+                  ? "Create account"
+                  : "Send reset link"}
           </Button>
         </form>
 
-        <div className="flex items-center gap-3 text-xs text-muted my-6">
-          <div className="flex-1 h-px bg-muted/20" />
-          or continue with
-          <div className="flex-1 h-px bg-muted/20" />
-        </div>
+        {mode !== "reset" && (
+          <>
+            <div className="flex items-center gap-3 text-xs text-muted my-6">
+              <div className="flex-1 h-px bg-muted/20" />
+              or continue with
+              <div className="flex-1 h-px bg-muted/20" />
+            </div>
 
-        <div className="flex gap-2 mb-6">
-          <Button
-            variant="secondary"
-            onClick={() => handleOAuth("google")}
-            className="flex-1"
-          >
-            Google
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => handleOAuth("github")}
-            className="flex-1"
-          >
-            GitHub
-          </Button>
-        </div>
+            <div className="flex gap-2 mb-6">
+              <Button
+                variant="secondary"
+                onClick={() => handleOAuth("google")}
+                className="flex-1"
+              >
+                Google
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => handleOAuth("github")}
+                className="flex-1"
+              >
+                GitHub
+              </Button>
+            </div>
+          </>
+        )}
 
-        <p className="text-sm text-muted text-center">
-          {mode === "login" ? "New here?" : "Already have an account?"}{" "}
-          <button
-            type="button"
-            onClick={toggleMode}
-            className="text-primary font-medium underline"
-          >
-            {mode === "login" ? "Create an account" : "Sign in instead"}
-          </button>
+        <p className="text-sm text-muted text-center mt-6">
+          {mode === "login" && (
+            <>
+              New here?{" "}
+              <button
+                type="button"
+                onClick={() => switchMode("signup")}
+                className="text-primary font-medium underline"
+              >
+                Create an account
+              </button>
+            </>
+          )}
+
+          {mode === "signup" && (
+            <>
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => switchMode("login")}
+                className="text-primary font-medium underline"
+              >
+                Sign in instead
+              </button>
+            </>
+          )}
+
+          {mode === "reset" && (
+            <>
+              Remembered your password?{" "}
+              <button
+                type="button"
+                onClick={() => switchMode("login")}
+                className="text-primary font-medium underline"
+              >
+                Back to sign in
+              </button>
+            </>
+          )}
         </p>
       </div>
     </div>

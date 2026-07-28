@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
@@ -143,6 +144,7 @@ export default function App() {
       <Route path="/" element={<Homepage />} />
 
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       <Route path="/design-system" element={<DesignSystem />} />
 
