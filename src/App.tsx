@@ -25,6 +25,7 @@ import {
   Tooltip,
   Dropdown,
   DataTable,
+  ErrorBoundary,
 } from "./components/ui";
 
 function DesignSystem() {
@@ -146,12 +147,40 @@ function DesignSystem() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Homepage />} />
+      <Route
+        path="/"
+        element={
+          <ErrorBoundary label="Home">
+            <Homepage />
+          </ErrorBoundary>
+        }
+      />
 
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route
+        path="/login"
+        element={
+          <ErrorBoundary label="Login">
+            <LoginPage />
+          </ErrorBoundary>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <ErrorBoundary label="Reset password">
+            <ResetPasswordPage />
+          </ErrorBoundary>
+        }
+      />
 
-      <Route path="/design-system" element={<DesignSystem />} />
+      <Route
+        path="/design-system"
+        element={
+          <ErrorBoundary label="Design system">
+            <DesignSystem />
+          </ErrorBoundary>
+        }
+      />
 
       <Route
         element={
@@ -160,9 +189,30 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/applications" element={<Applications />} />
-        <Route path="/analytics" element={<Analytics />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ErrorBoundary label="Dashboard">
+              <Dashboard />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/applications"
+          element={
+            <ErrorBoundary label="Applications">
+              <Applications />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <ErrorBoundary label="Analytics">
+              <Analytics />
+            </ErrorBoundary>
+          }
+        />
       </Route>
     </Routes>
   );
