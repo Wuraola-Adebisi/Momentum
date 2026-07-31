@@ -9,6 +9,7 @@ export { Field } from "./Field";
 
 export { Skeleton } from "./Skeleton";
 export { EmptyState } from "./EmptyState";
+export { ToastViewport } from "./Toast";
 
 export { Modal } from "./Modal";
 export { Drawer } from "./Drawer";

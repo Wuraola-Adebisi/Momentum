@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
+import { useToast } from "./useToast";
 import { mapNote, toNoteInsert } from "../lib/mappers";
 import type { Note } from "../types";
 
@@ -28,6 +29,7 @@ export function useNotes(applicationId: string | undefined) {
 export function useCreateNote(applicationId: string) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (content: string): Promise<Note> => {
@@ -53,12 +55,19 @@ export function useCreateNote(applicationId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notesKey(applicationId) });
       queryClient.invalidateQueries({ queryKey: ["activityLog"] });
+      toast.success("Note added");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't add the note. Try again.",
+      );
     },
   });
 }
 
 export function useDeleteNote(applicationId: string) {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (id: string): Promise<string> => {
@@ -68,6 +77,12 @@ export function useDeleteNote(applicationId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notesKey(applicationId) });
+      toast.success("Note deleted");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't delete the note. Try again.",
+      );
     },
   });
 }

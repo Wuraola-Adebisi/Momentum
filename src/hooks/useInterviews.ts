@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
+import { useToast } from "./useToast";
 import { mapInterview, toInterviewInsert } from "../lib/mappers";
 import type { CreateInterviewInput, Interview } from "../types";
 
@@ -30,6 +31,7 @@ type NewInterviewInput = Omit<CreateInterviewInput, "applicationId">;
 export function useCreateInterview(applicationId: string) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (input: NewInterviewInput): Promise<Interview> => {
@@ -56,12 +58,19 @@ export function useCreateInterview(applicationId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: interviewsKey(applicationId) });
       queryClient.invalidateQueries({ queryKey: ["activityLog"] });
+      toast.success("Interview scheduled");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't schedule the interview. Try again.",
+      );
     },
   });
 }
 
 export function useDeleteInterview(applicationId: string) {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (id: string): Promise<string> => {
@@ -71,6 +80,12 @@ export function useDeleteInterview(applicationId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: interviewsKey(applicationId) });
+      toast.success("Interview removed");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't remove the interview. Try again.",
+      );
     },
   });
 }

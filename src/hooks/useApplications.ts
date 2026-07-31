@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
+import { useToast } from "./useToast";
 import {
   mapApplication,
   toApplicationInsert,
@@ -32,6 +33,7 @@ export function useApplications() {
 export function useCreateApplication() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (input: CreateApplicationInput): Promise<Application> => {
@@ -58,12 +60,19 @@ export function useCreateApplication() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: APPLICATIONS_KEY });
       queryClient.invalidateQueries({ queryKey: ["activityLog"] });
+      toast.success("Application added");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't add the application. Try again.",
+      );
     },
   });
 }
 
 export function useUpdateApplication() {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (input: UpdateApplicationInput): Promise<Application> => {
@@ -81,12 +90,19 @@ export function useUpdateApplication() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: APPLICATIONS_KEY });
+      toast.success("Application updated");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't update the application. Try again.",
+      );
     },
   });
 }
 
 export function useDeleteApplication() {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async (id: string): Promise<string> => {
@@ -99,6 +115,12 @@ export function useDeleteApplication() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: APPLICATIONS_KEY });
+      toast.success("Application deleted");
+    },
+    onError: (err) => {
+      toast.error(
+        err instanceof Error ? err.message : "Couldn't delete the application. Try again.",
+      );
     },
   });
 }
@@ -112,6 +134,7 @@ interface UpdateStatusInput {
 export function useUpdateApplicationStatus() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: async ({ id, status, position }: UpdateStatusInput) => {
@@ -152,6 +175,7 @@ export function useUpdateApplicationStatus() {
       if (context?.previous) {
         queryClient.setQueryData(APPLICATIONS_KEY, context.previous);
       }
+      toast.error("Couldn't update the status. Reverted.");
     },
 
     onSettled: () => {
