@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { AlertTriangle, BarChart3 } from "lucide-react";
 import { Skeleton, EmptyState } from "../components/ui";
 import { ResponseRateChart } from "../components/analytics/ResponseRateChart";
 import { ApplicationsPerWeekChart } from "../components/analytics/ApplicationsPerWeekChart";
@@ -12,6 +14,7 @@ import {
 } from "../lib/analytics";
 
 export default function Analytics() {
+  const navigate = useNavigate();
   const {
     data: applications,
     isLoading: applicationsLoading,
@@ -55,15 +58,20 @@ export default function Analytics() {
 
       {applicationsError && (
         <EmptyState
+          icon={AlertTriangle}
+          tone="error"
           title="Couldn't load your analytics"
-          description="Something went wrong fetching your applications. Try refreshing the page."
+          description="Something went wrong fetching your applications. Refresh the page to try again."
         />
       )}
 
       {!isLoading && !applicationsError && applications && applications.length === 0 && (
         <EmptyState
+          icon={BarChart3}
           title="Nothing to analyze yet"
-          description="Add a few applications and your response rate, weekly activity, and response time will show up here."
+          description="Add a few applications to see your response rate, weekly activity, and response time."
+          actionLabel="Add application"
+          onAction={() => navigate("/applications?new=true")}
         />
       )}
 

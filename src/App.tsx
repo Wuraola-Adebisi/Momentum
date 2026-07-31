@@ -11,6 +11,7 @@ import Analytics from "./pages/Analytics";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
+import { Inbox } from "lucide-react";
 import {
   Button,
   Card,
@@ -68,7 +69,11 @@ function DesignSystem() {
       </Card>
 
       <Card>
-        <EmptyState title="No data" description="This is a preview state" />
+        <EmptyState
+          icon={Inbox}
+          title="No data"
+          description="This is a preview state"
+        />
       </Card>
 
       <Card>

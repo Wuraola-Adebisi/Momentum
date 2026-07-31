@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  AlertTriangle,
   BriefcaseBusiness,
   CalendarClock,
   Trophy,
@@ -65,13 +66,16 @@ export default function Dashboard() {
 
       {applicationsError && (
         <EmptyState
+          icon={AlertTriangle}
+          tone="error"
           title="Couldn't load your dashboard"
-          description="Something went wrong fetching your data. Try refreshing the page."
+          description="Something went wrong fetching your data. Refresh the page to try again."
         />
       )}
 
       {!isLoading && !applicationsError && !hasApplications && (
         <EmptyState
+          icon={BriefcaseBusiness}
           title="No applications yet"
           description="Add your first application to start seeing your stats and activity here."
           actionLabel="Add application"

@@ -43,8 +43,9 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({
 
       {recent.length === 0 ? (
         <EmptyState
+          icon={ActivityIcon}
           title="No activity yet"
-          description="Adding applications and moving them through stages will show up here."
+          description="Add an application or move one to a new stage to start building this feed."
         />
       ) : (
         <ul className="space-y-4">

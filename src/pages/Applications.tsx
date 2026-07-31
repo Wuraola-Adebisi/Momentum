@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { BriefcaseBusiness, SearchX } from "lucide-react";
 import { Button, Skeleton, EmptyState, Modal } from "../components/ui";
 import { ApplicationDetail } from "../components/applications/ApplicationDetail";
 import { ApplicationForm } from "../components/applications/ApplicationForm";
@@ -21,7 +22,7 @@ export default function Applications() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [formOpen, setFormOpen] = useState(false);
- const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
+  const [editingApplication, setEditingApplication] = useState<Application | undefined>(undefined);
   const [pendingDelete, setPendingDelete] = useState<Application | null>(null);
   const [detailApplication, setDetailApplication] =
     useState<Application | null>(null);
@@ -172,6 +173,7 @@ export default function Applications() {
 
       {!isLoading && !isError && applications && applications.length === 0 && (
         <EmptyState
+          icon={BriefcaseBusiness}
           title="No applications yet"
           description="Add your first application to start tracking your job search."
           actionLabel="Add application"
@@ -181,6 +183,8 @@ export default function Applications() {
 
       {hasNoResults && (
         <EmptyState
+          icon={SearchX}
+          tone="muted"
           title="No applications match your filters"
           description="Try a different search or clear your filters to see everything."
           actionLabel={hasActiveFilters ? "Clear filters" : undefined}
