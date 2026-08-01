@@ -10,6 +10,8 @@ interface DropdownProps {
   onSelect: (value: string) => void;
   label?: string;
   trigger?: React.ReactNode;
+  /** Accessible name for the trigger button. Required whenever `trigger` is icon-only (no visible text), since there's nothing else for a screen reader to announce. */
+  triggerAriaLabel?: string;
   align?: "left" | "right";
 }
 
@@ -18,6 +20,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onSelect,
   label = "Select",
   trigger,
+  triggerAriaLabel,
   align = "left",
 }) => {
   const [open, setOpen] = useState(false);
@@ -55,6 +58,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
           e.stopPropagation();
           setOpen((v) => !v);
         }}
+        aria-label={trigger ? triggerAriaLabel : undefined}
+        aria-haspopup="menu"
+        aria-expanded={open}
         className={
           trigger
             ? ""
@@ -70,18 +76,18 @@ export const Dropdown: React.FC<DropdownProps> = ({
             align === "right" ? "right-0" : "left-0"
           }`}
         >
-          {options.map((opt) => (
-            <div
-              key={opt.value}
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(opt.value);
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                onSelect(option.value);
                 setOpen(false);
               }}
-              className="cursor-pointer px-3 py-2 text-sm hover:bg-paper"
+              className="block w-full px-4 py-2 text-left text-sm text-ink hover:bg-muted/10"
             >
-              {opt.label}
-            </div>
+              {option.label}
+            </button>
           ))}
         </div>
       )}

@@ -23,6 +23,7 @@ export function ViewSwitcher() {
         variant={view === "table" ? "accent" : "ghost"}
         onClick={() => setView("table")}
         aria-pressed={view === "table"}
+        aria-label="Switch to table view"
       >
         <Table2 size={16} />
         <span className="hidden sm:inline">Table</span>
@@ -32,6 +33,7 @@ export function ViewSwitcher() {
         variant={view === "board" ? "accent" : "ghost"}
         onClick={() => setView("board")}
         aria-pressed={view === "board"}
+        aria-label="Switch to board view"
       >
         <LayoutGrid size={16} />
         <span className="hidden sm:inline">Board</span>

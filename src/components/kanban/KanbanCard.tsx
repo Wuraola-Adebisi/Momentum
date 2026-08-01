@@ -98,6 +98,7 @@ export function KanbanCard({
                 align="right"
                 options={menuOptions}
                 onSelect={handleMenuSelect}
+                triggerAriaLabel={`More actions for ${application.companyName}`}
                 trigger={
                   <span className="flex h-7 w-7 items-center justify-center rounded-md text-muted hover:bg-muted/10 hover:text-ink transition">
                     <MoreVertical size={16} />

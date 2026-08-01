@@ -41,6 +41,7 @@ export default function TopBar() {
       <div className="ml-4 flex items-center gap-2 md:ml-8 md:gap-4">
         <Button
           variant="accent"
+          aria-label="Add application"
           onClick={() => navigate("/applications?new=true")}
         >
           <Plus size={18} />
