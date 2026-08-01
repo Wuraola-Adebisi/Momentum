@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button, Input, Select, Field } from "../ui";
 import { useCreateApplication, useUpdateApplication } from "../../hooks/useApplications";
 import type { Application, ApplicationStatus, CreateApplicationInput } from "../../types";
@@ -63,6 +63,11 @@ export function ApplicationForm({ open, onClose, application }: ApplicationFormP
   const [form, setForm] = useState<FormState>(() =>
     application ? formFromApplication(application) : emptyForm()
   );
+  // Snapshot of `form` as it was when the modal last opened. Comparing
+  // against this (rather than against emptyForm()) is what makes "dirty"
+  // work correctly for edits too: an edit form starts non-empty, so it
+  // must be compared to its own starting point, not to a blank form.
+  const [initialForm, setInitialForm] = useState<FormState>(form);
   const [errors, setErrors] = useState<FormErrors>({});
 
   // Reset the form whenever the modal transitions from closed to open (or
@@ -74,9 +79,33 @@ export function ApplicationForm({ open, onClose, application }: ApplicationFormP
   if (open !== prevOpen) {
     setPrevOpen(open);
     if (open) {
-      setForm(application ? formFromApplication(application) : emptyForm());
+      const nextForm = application ? formFromApplication(application) : emptyForm();
+      setForm(nextForm);
+      setInitialForm(nextForm);
       setErrors({});
     }
+  }
+
+  const isDirty = open && JSON.stringify(form) !== JSON.stringify(initialForm);
+
+  // Warn on tab close/refresh while there are unsaved edits.
+  useEffect(() => {
+    if (!isDirty) return;
+
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = "";
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
+  // Guard every way the modal can be dismissed (backdrop click, Escape,
+  // Cancel button) so unsaved edits aren't silently discarded.
+  function handleClose() {
+    if (isDirty && !window.confirm("Discard unsaved changes?")) return;
+    onClose();
   }
 
   const createApplication = useCreateApplication();
@@ -127,7 +156,7 @@ export function ApplicationForm({ open, onClose, application }: ApplicationFormP
   }
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleClose} ariaLabel={isEditing ? "Edit application" : "Add application"}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <h2 className="text-xl font-display font-semibold text-ink">
           {isEditing ? "Edit application" : "Add application"}
@@ -202,7 +231,7 @@ export function ApplicationForm({ open, onClose, application }: ApplicationFormP
         )}
 
         <div className="flex justify-end gap-3 pt-2">
-          <Button type="button" variant="ghost" onClick={onClose} disabled={isSaving}>
+          <Button type="button" variant="ghost" onClick={handleClose} disabled={isSaving}>
             Cancel
           </Button>
           <Button type="submit" variant="accent" loading={isSaving}>
