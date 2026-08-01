@@ -130,7 +130,7 @@ export default function Applications() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+     <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-display font-bold text-ink">
             Applications
@@ -140,9 +140,11 @@ export default function Applications() {
           </p>
         </div>
 
-        <Button variant="accent" onClick={openCreateForm}>
-          Add application
-        </Button>
+        {hasAnyApplications && (
+          <Button variant="accent" onClick={openCreateForm}>
+            Add application
+          </Button>
+        )}
       </div>
 
       {hasAnyApplications && (
