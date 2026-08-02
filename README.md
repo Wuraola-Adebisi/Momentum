@@ -1,75 +1,51 @@
-# React + TypeScript + Vite
+# Momentum
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A career management platform for tracking job applications end to end, board and table views, notes, interviews, an activity log, and analytics.
 
-Currently, two official plugins are available:
+**Live app:** [momentum-ebon-ten.vercel.app](https://momentum-ebon-ten.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Why this exists
 
-## React Compiler
+Job searching generates a lot of scattered state: applications, notes, interview dates, follow-ups, with no single place to see it all or track progress over time. Momentum solves that for personal use first, and doubles as a demonstration of full product thinking, not just UI work: real auth, a Postgres schema with row-level security, optimistic UI, and analytics derived from actual activity data rather than static mockups.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- **Board and table views** of every application, switchable and synced to the URL
+- **Drag-and-drop status updates** on the board, optimistic with automatic rollback on failure
+- **Application detail drawer** with notes and scheduled interviews per application
+- **URL-driven filters and search**, debounced, shareable, and back-button aware
+- **Dashboard analytics** (response rate, weekly application volume, status breakdown) computed from a real activity log, not derived from current-state snapshots
+- **Full auth**, email plus Google and GitHub OAuth, with Postgres row-level security on every table so a user can only ever read or write their own data
+- **Accessible by default**, real focus traps and Escape-to-close on Modal and Drawer, audited aria-labels on every icon-only control
+- **Responsive from mobile through 4K**, including a mobile-specific status-picker sheet that replaces drag-and-drop on touch devices
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Framework:** React 19, TypeScript, Vite
+- **Styling:** Tailwind CSS
+- **Data & server state:** Supabase (Postgres, Auth, Row Level Security), TanStack Query
+- **Drag and drop:** dnd-kit
+- **Charts:** Recharts
+- **Routing:** React Router (URL-driven filters via `useSearchParams`)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Client/UI state that doesn't need to be shared across the app uses local component state; state that does (auth) lives in React Context, following a three-file separation pattern (context object, provider, hook) to keep concerns split cleanly.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+
+
+## Project structure
 
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+src/
+  components/    # UI primitives, layout, and feature components, kept presentational
+  context/       # context objects and providers, split into separate files
+  hooks/         # data fetching and mutations (TanStack Query), one concern per hook
+  lib/           # Supabase client, data mappers, query client config
+  pages/         # routed pages
+  types/         # hand-written interfaces plus generated Supabase types
 ```
+
+UI, data, and logic are kept in separate layers throughout: components stay presentational, hooks own fetching and mutations, and mapper functions at the API boundary keep Postgres's `snake_case` from leaking into the rest of the app.
+
+## Status
+
+Core MVP is feature-complete: auth, CRUD, board and table views, filters, notes and interviews, analytics, and a full accessibility and polish pass. Global search and a command palette are scoped for later, deliberately out of scope for now.
