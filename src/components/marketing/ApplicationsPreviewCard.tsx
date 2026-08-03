@@ -1,4 +1,3 @@
-import { CalendarClock } from "lucide-react";
 import { BrowserFrame } from "./BrowserFrame";
 
 interface Column {
@@ -7,7 +6,6 @@ interface Column {
   cards: { company: string; role: string }[];
 }
 
-// Illustrative demo data for the preview only, not real user data.
 const columns: Column[] = [
   {
     label: "Applied",
@@ -41,9 +39,6 @@ const cardBorderClass: Record<string, string> = {
   Rejected: "border-l-status-rejected",
 };
 
-// Ring math for the 68% response-rate stat card: r = 16, so
-// circumference = 2 * PI * 16 = ~100.5. The dash offset leaves 68% of
-// the ring visible.
 const RING_RADIUS = 16;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 const RING_PERCENT = 0.68;
@@ -86,7 +81,7 @@ export function ApplicationsPreviewCard() {
         </div>
       </BrowserFrame>
 
-      <div className="absolute -bottom-2 -left-4 flex items-center gap-3 rounded-xl border border-muted/10 bg-surface px-4 py-3 shadow-[0_20px_40px_-16px_rgba(11,42,77,0.30)] sm:-left-7">
+      <div className="absolute -bottom-2 -left-2 flex items-center gap-3 rounded-xl border border-muted/10 bg-surface px-4 py-3 shadow-[0_20px_40px_-16px_rgba(11,42,77,0.30)] sm:-left-7">
         <svg width="40" height="40" viewBox="0 0 40 40" className="shrink-0">
           <circle
             cx="20"
@@ -117,10 +112,7 @@ export function ApplicationsPreviewCard() {
         </div>
       </div>
 
-      <div className="absolute -right-2 top-2 hidden max-w-[170px] items-center gap-2.5 rounded-xl border border-muted/10 bg-surface px-3.5 py-2.5 shadow-[0_20px_40px_-16px_rgba(11,42,77,0.30)] sm:-right-5 sm:flex">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-status-interviewing/12 text-status-interviewing">
-          <CalendarClock size={16} />
-        </div>
+      <div className="absolute -right-2 top-2 hidden max-w-[170px] items-center gap-2.5 rounded-xl border-l-[3px] border-l-status-interviewing border-y border-r border-muted/10 bg-surface px-3.5 py-2.5 shadow-[0_20px_40px_-16px_rgba(11,42,77,0.30)] sm:-right-5 sm:flex">
         <div>
           <p className="text-xs font-semibold leading-tight text-ink">
             Interview tomorrow

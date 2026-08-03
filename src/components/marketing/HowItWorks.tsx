@@ -1,20 +1,22 @@
 import { SECTION_PADDING_X, SECTION_PADDING_Y_SM } from "./layout";
-
 const steps = [
   {
     number: "01",
     title: "Add an application",
     description: "Save the role, company, and link in seconds.",
+    dot: "bg-status-applied",
   },
   {
     number: "02",
     title: "Track it through stages",
     description: "Applied, interviewing, offer, or rejected.",
+    dot: "bg-status-interviewing",
   },
   {
     number: "03",
     title: "Never lose the thread",
     description: "Notes and interviews stay right where they belong.",
+    dot: "bg-status-offer",
   },
 ];
 
@@ -29,26 +31,29 @@ export function HowItWorks() {
           How it works
         </h2>
 
-        <div className="mt-10 flex items-start justify-center">
-          {steps.map((step, i) => (
-            <div key={step.number} className="flex items-start">
-              <div className="w-32 text-center sm:w-40">
-                <p className="font-display text-xl font-extrabold text-primary">
-                  {step.number}
-                </p>
+        <div className="mx-auto mt-10 max-w-sm sm:max-w-2xl">
+          <div className="flex flex-col gap-7 sm:flex-row sm:gap-4">
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className="flex gap-3 sm:flex-1 sm:flex-col sm:items-center sm:gap-2 sm:text-center"
+              >
+                <div className="flex shrink-0 items-center gap-2 sm:flex-col sm:gap-2">
+                  <span className={`h-2.5 w-2.5 rounded-full ${step.dot}`} />
+                  <p className="font-data text-xs font-semibold text-muted">
+                    {step.number}
+                  </p>
+                </div>
 
-                <p className="mt-2 text-sm font-semibold text-ink">
-                  {step.title}
-                </p>
-
-                <p className="mt-1 text-xs text-muted">{step.description}</p>
+                <div>
+                  <p className="text-sm font-semibold text-ink">{step.title}</p>
+                  <p className="mt-1 text-xs text-muted sm:mx-auto sm:max-w-[13rem]">
+                    {step.description}
+                  </p>
+                </div>
               </div>
-
-              {i < steps.length - 1 && (
-                <div className="mt-3 hidden h-px w-10 bg-muted/20 sm:block md:w-16" />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

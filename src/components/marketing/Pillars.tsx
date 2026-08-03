@@ -32,11 +32,11 @@ export function Pillars() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-4 md:mt-16 md:grid-cols-3">
+        <div className="mt-14 divide-y divide-muted/10 border-y border-muted/10 md:mt-16 md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
           {PILLARS.map((pillar) => (
             <div
               key={pillar.phrase}
-              className="rounded-2xl border border-muted/10 bg-surface p-8"
+              className="py-7 first:pt-0 last:pb-0 md:px-8 md:py-2 md:first:pl-0 md:last:pr-0"
             >
               <p className="font-display text-lg font-bold text-ink">
                 {pillar.phrase}

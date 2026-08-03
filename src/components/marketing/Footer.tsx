@@ -6,72 +6,81 @@ const REPO_URL = "https://github.com/Wuraola-Adebisi/Momentum";
 
 export function Footer() {
   return (
-    <footer
-      className={`border-t border-muted/10 py-10 md:py-12 ${SECTION_PADDING_X}`}
-    >
-      <div className="mx-auto grid w-full max-w-content grid-cols-1 gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <p className="font-display text-sm font-bold text-ink">Momentum</p>
-          <p className="mt-2 max-w-xs text-sm text-muted">
-            A calmer way to track your job search, one board for every
-            application, interview, and offer.
-          </p>
-        </div>
+    <footer className={`bg-ink text-white ${SECTION_PADDING_X}`}>
+      <div className="mx-auto w-full max-w-content py-14 md:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <p className="font-display text-lg font-bold text-white">
+              Momentum
+            </p>
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
+              A calmer way to track your job search, one board for every
+              application, interview, and offer.
+            </p>
+          </div>
 
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Explore
-          </p>
-          <div className="mt-3.5 flex flex-col gap-2.5">
-            <a
-              href="#features"
-              className="text-sm text-ink transition-colors hover:text-primary"
-            >
-              Features
-            </a>
-            <a
-              href="#showcase"
-              className="text-sm text-ink transition-colors hover:text-primary"
-            >
-              See it in action
-            </a>
-            <a
-              href="#how-it-works"
-              className="text-sm text-ink transition-colors hover:text-primary"
-            >
-              How it works
-            </a>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-white/40">
+              Explore
+            </p>
+            <div className="mt-4 flex flex-col gap-3">
+              <a
+                href="#features"
+                className="text-sm text-white/75 transition-colors hover:text-white"
+              >
+                Features
+              </a>
+              <a
+                href="#showcase"
+                className="text-sm text-white/75 transition-colors hover:text-white"
+              >
+                See it in action
+              </a>
+              <a
+                href="#how-it-works"
+                className="text-sm text-white/75 transition-colors hover:text-white"
+              >
+                How it works
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-white/40">
+              Project
+            </p>
+            <div className="mt-4 flex flex-col gap-3">
+              <a
+                href={REPO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 text-sm text-white/75 transition-colors hover:text-white"
+              >
+                <GitFork size={13} />
+                View source
+              </a>
+              <Link
+                to="/login"
+                className="text-sm text-white/75 transition-colors hover:text-white"
+              >
+                Sign in
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Project
+        <div className="mt-12 flex flex-col-reverse items-center gap-4 border-t border-white/10 pt-6 sm:flex-row sm:justify-between">
+          <p className="font-data text-[11px] text-white/40">
+            &copy; {new Date().getFullYear()} Wuraola Adebisi. All rights reserved.
           </p>
-          <div className="mt-3.5 flex flex-col gap-2.5">
-            <a
-              href={REPO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 text-sm text-ink transition-colors hover:text-primary"
-            >
-              <GitFork size={13} />
-              View source
-            </a>
-            <Link
-              to="/login"
-              className="text-sm text-ink transition-colors hover:text-primary"
-            >
-              Sign in
-            </Link>
-          </div>
-        </div>
-      </div>
 
-      <div className="mx-auto mt-10 w-full max-w-content border-t border-muted/10 pt-6">
-        <p className="font-data text-[11px] text-muted">
-          &copy; {new Date().getFullYear()} Wuraola Adebisi
-        </p>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="font-data text-[11px] uppercase tracking-wide text-white/40 transition-colors hover:text-white"
+          >
+            Back to top
+          </button>
+        </div>
       </div>
     </footer>
   );
