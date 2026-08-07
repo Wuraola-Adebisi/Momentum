@@ -44,6 +44,7 @@ const TABS: Tab[] = [
 
 export function ShowcaseTabs() {
   const [activeKey, setActiveKey] = useState(TABS[0].key);
+
   const activeTab = TABS.find((tab) => tab.key === activeKey) ?? TABS[0];
 
   return (
@@ -51,11 +52,9 @@ export function ShowcaseTabs() {
       id="showcase"
       className={`bg-surface ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}
     >
-      <div className="mx-auto w-full max-w-content">
-        <div className="mx-auto max-w-xl text-center">
-          <h2 className="font-display text-3xl font-bold leading-tight text-ink md:text-4xl">
-            One dataset, three ways to look at it.
-          </h2>
+      <div className="mx-auto max-w-content">
+        <div className="max-w-2xl">
+          <h2>One dataset, three ways to look at it.</h2>
         </div>
 
         <div
@@ -70,10 +69,19 @@ export function ShowcaseTabs() {
               aria-selected={tab.key === activeKey}
               onClick={() => setActiveKey(tab.key)}
               className={clsx(
-                "rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors",
+                `
+                rounded-full
+                border
+                px-5
+                py-2.5
+                text-sm
+                font-semibold
+                transition-all
+                duration-200
+              `,
                 tab.key === activeKey
-                  ? "border-ink bg-ink text-white"
-                  : "border-muted/20 text-muted hover:text-ink",
+                  ? "border-ink bg-ink text-white shadow-sm"
+                  : "border-muted/20 bg-white text-muted hover:border-muted/40 hover:text-ink",
               )}
             >
               {tab.label}
@@ -81,29 +89,72 @@ export function ShowcaseTabs() {
           ))}
         </div>
 
-        <div className="mt-10 grid grid-cols-1 items-stretch gap-5 md:mt-12 lg:grid-cols-[.85fr_1.15fr]">
-          <div className="flex flex-col justify-center rounded-2xl bg-ink px-8 py-10 md:px-10">
+        <div className="mt-10 grid grid-cols-1 gap-5 md:mt-12 lg:grid-cols-[0.85fr_1.15fr]">
+          <div
+            className="
+              flex
+              flex-col
+              justify-center
+              rounded-3xl
+              bg-ink
+              px-8
+              py-10
+              md:px-10
+            "
+          >
             <h3 className="font-display text-2xl font-bold text-white">
               {activeTab.title}
             </h3>
 
-            <p className="mt-3 text-sm leading-relaxed text-white/65">
+            <p className="mt-4 text-sm leading-relaxed text-white/60">
               {activeTab.description}
             </p>
 
             <Link
               to="/login?mode=signup"
-              className="group mt-6 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-white"
+              className="
+                group
+                mt-7
+                inline-flex
+                w-fit
+                items-center
+                gap-2
+                rounded-full
+                bg-white/10
+                px-4
+                py-2
+                text-sm
+                font-semibold
+                text-white
+                transition-colors
+                hover:bg-white/20
+              "
             >
               Try {activeTab.label.toLowerCase()}
               <ArrowRight
                 size={16}
-                className="transition-transform group-hover:translate-x-1"
+                className="transition-transform duration-200 group-hover:translate-x-1"
               />
             </Link>
           </div>
 
-          <div className="flex min-h-[260px] items-center justify-center rounded-2xl border border-muted/15 bg-paper p-6 md:p-8">
+          <div
+            className="
+              flex
+              min-h-[280px]
+              items-center
+              justify-center
+              overflow-hidden
+              rounded-3xl
+              border
+              border-muted/15
+              bg-paper
+              p-6
+              transition-all
+              duration-300
+              md:p-8
+            "
+          >
             {activeTab.preview}
           </div>
         </div>

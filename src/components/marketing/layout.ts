@@ -1,10 +1,12 @@
 export const SECTION_PADDING_X =
-  "px-7 sm:px-10 md:px-16 xl:px-24 3xl:px-[136px]";
+  "px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 3xl:px-[120px]";
 
-export const SECTION_PADDING_Y =
-  "py-[72px] md:py-[104px] xl:py-[136px] 3xl:py-[164px]";
+export const HERO_PADDING_Y = "py-20 md:py-24 xl:py-28 3xl:py-32";
 
-export const SECTION_PADDING_Y_SM = "py-14 md:py-20 xl:py-24 3xl:py-28";
+export const SECTION_PADDING_Y = "py-14 md:py-18 xl:py-20 3xl:py-24";
+
+export const SECTION_PADDING_Y_SM = "py-10 md:py-14 xl:py-16 3xl:py-20";
+
 export const STATUS_SEQUENCE = [
   {
     key: "applied",

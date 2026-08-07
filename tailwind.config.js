@@ -27,9 +27,9 @@ export default {
         },
       },
       fontFamily: {
-        display: ["Sora", "sans-serif"],
-        body: ["Work Sans", "sans-serif"],
-        data: ["Roboto Mono", "monospace"],
+        display: ["Geist", "sans-serif"],
+        body: ["Geist", "sans-serif"],
+        data: ["Geist Mono", "monospace"],
       },
       maxWidth: {
         content: "1760px",

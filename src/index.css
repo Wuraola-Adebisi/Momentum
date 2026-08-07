@@ -1,9 +1,40 @@
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-paper text-ink font-body;
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+
+  h1 {
+    @apply font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] md:text-6xl lg:text-7xl;
+  }
+
+  h2 {
+    @apply font-display text-3xl font-semibold leading-tight tracking-[-0.025em] md:text-5xl;
+  }
+
+  h3 {
+    @apply font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl;
+  }
+
+  p {
+    @apply leading-7;
+  }
+
+  button,
+  a {
+    @apply transition-colors;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-ink;
+  }
 }

@@ -1,4 +1,5 @@
 import { SECTION_PADDING_X, SECTION_PADDING_Y_SM } from "./layout";
+
 const steps = [
   {
     number: "01",
@@ -22,40 +23,63 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <div
+    <section
       id="how-it-works"
       className={`bg-surface ${SECTION_PADDING_X} ${SECTION_PADDING_Y_SM}`}
     >
-      <div className="mx-auto w-full max-w-content">
-        <h2 className="text-center font-display text-xl font-bold text-ink md:text-2xl">
-          How it works
-        </h2>
+      <div className="mx-auto max-w-content">
+        <h2 className="text-center">How it works</h2>
 
-        <div className="mx-auto mt-10 max-w-sm sm:max-w-2xl">
-          <div className="flex flex-col gap-7 sm:flex-row sm:gap-4">
+        <div className="mx-auto mt-12 max-w-3xl">
+          <div className="relative grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
+            <div className="absolute left-1/2 top-3 hidden h-px w-[60%] -translate-x-1/2 bg-muted/20 sm:block" />
+
             {steps.map((step) => (
               <div
                 key={step.number}
-                className="flex gap-3 sm:flex-1 sm:flex-col sm:items-center sm:gap-2 sm:text-center"
+                className="
+                  relative
+                  flex
+                  flex-col
+                  items-center
+                  text-center
+                  transition-transform
+                  duration-200
+                  hover:-translate-y-1
+                "
               >
-                <div className="flex shrink-0 items-center gap-2 sm:flex-col sm:gap-2">
-                  <span className={`h-2.5 w-2.5 rounded-full ${step.dot}`} />
-                  <p className="font-data text-xs font-semibold text-muted">
-                    {step.number}
-                  </p>
-                </div>
+                <div
+                  className={`
+                    relative
+                    z-10
+                    flex
+                    h-6
+                    w-6
+                    items-center
+                    justify-center
+                    rounded-full
+                    ${step.dot}
+                    ring-4
+                    ring-surface
+                  `}
+                />
 
-                <div>
-                  <p className="text-sm font-semibold text-ink">{step.title}</p>
-                  <p className="mt-1 text-xs text-muted sm:mx-auto sm:max-w-[13rem]">
-                    {step.description}
-                  </p>
-                </div>
+                <p className="mt-4 font-data text-xs font-semibold text-muted">
+                  {step.number}
+                </p>
+
+                <p className="mt-2 text-sm font-semibold text-ink">
+                  {step.title}
+                </p>
+
+                <p className="mt-2 max-w-[13rem] text-xs leading-relaxed text-muted">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
