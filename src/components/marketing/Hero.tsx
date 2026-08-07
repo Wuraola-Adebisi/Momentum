@@ -1,15 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/Button";
-import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout";
-
-const FEATURE_PILLS = [
-  "Board view",
-  "Table view",
-  "Notes & interviews",
-  "Analytics",
-  "Activity log",
-];
+import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout"
 
 export function Hero() {
   return (
