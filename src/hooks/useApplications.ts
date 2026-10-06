@@ -29,12 +29,14 @@ export function useCreateApplication() {
   return useMutation({
     mutationFn: async (input: CreateApplicationInput): Promise<Application> => {
       if (!user) throw new Error("You must be signed in to add an application.");
-      const { data: latest, error: latestError } = await supabase.from("applications").select("position").order("position", { ascending: false }).limit(1).maybeSingle();
-      if (latestError) throw latestError;
-      const position = (latest?.position ?? -1) + 1;
-      const { data, error } = await supabase.from("applications").insert(toApplicationInsert({ ...input, position }, user.id)).select().single();
+      const { data, error } = await supabase.from("applications").insert(toApplicationInsert(input, user.id)).select().single();
       if (error) throw error;
-      await supabase.from("activity_log").insert({ user_id: user.id, application_id: data.id, action_type: "created", description: "Applied to " + input.companyName + " for " + input.roleTitle });
+      await supabase.from("activity_log").insert({
+        user_id: user.id,
+        application_id: data.id,
+        action_type: "created",
+        description: "Applied to " + input.companyName + " for " + input.roleTitle,
+      });
       return mapApplication(data);
     },
     onSuccess: () => {
