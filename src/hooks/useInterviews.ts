@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
 import { mapInterview, toInterviewInsert } from "../lib/mappers";
+import { allInterviewsKey } from "./useAllInterviews";
 import type { CreateInterviewInput, Interview } from "../types";
 
 export function interviewsKey(applicationId: string) {
