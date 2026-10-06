@@ -1,88 +1,40 @@
+import { BarChart3, CalendarClock, KanbanSquare, NotebookPen, Search, Zap } from "lucide-react";
 import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout";
 
-interface Feature {
-  title: string;
-  description: string;
-}
-
-const FEATURES: Feature[] = [
-  {
-    title: "Board view",
-    description:
-      "Drag applications between Applied, Interviewing, Offer, and Rejected. Status and order persist instantly.",
-  },
-  {
-    title: "Table view",
-    description:
-      "Sort and filter every application at once. Search, status, and sorting live in the URL, so a view is one link away.",
-  },
-  {
-    title: "Notes & interviews",
-    description:
-      "Log interview rounds and keep running notes on every application, right inside its detail view.",
-  },
-  {
-    title: "Analytics",
-    description:
-      "Response rate, applications per week, and time to first response. Understand the shape of your search, not just a list.",
-  },
-  {
-    title: "Activity log",
-    description:
-      "Every status change, note, and scheduled interview is timestamped automatically. Nothing gets lost.",
-  },
-  {
-    title: "Shareable filters",
-    description:
-      "Every filter, sort, and search lives in the URL. Bookmark a view and return exactly where you left off.",
-  },
+const FEATURES = [
+  { icon: KanbanSquare, title: "A pipeline you can see", description: "Know what is Applied, what reached an interview, what turned into an offer, and what is done." },
+  { icon: Search, title: "Find anything fast", description: "Search and filter your applications without losing the context around them." },
+  { icon: NotebookPen, title: "Keep the thread", description: "Store notes, interview rounds, links, and the details you will otherwise forget." },
+  { icon: CalendarClock, title: "Know what is next", description: "Upcoming interviews and ageing applications surface the work that deserves attention." },
+  { icon: BarChart3, title: "Read the pattern", description: "Response, interview, offer, and activity metrics show how the search is actually performing." },
+  { icon: Zap, title: "Move without friction", description: "Change status, schedule interviews, and update applications without fighting the interface." },
 ];
 
 export function WhyMomentum() {
   return (
-    <section
-      id="features"
-      className={`bg-ink text-white ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}
-    >
+    <section id="features" className={`bg-ink text-white ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}>
       <div className="mx-auto max-w-content">
-        <div className="max-w-2xl">
-          <h2 className="text-white">
-            Everything your job search actually needs.
-          </h2>
+        <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+          <div>
+            <p className="font-data text-[10px] uppercase tracking-[0.18em] text-white/45">The point</p>
+            <h2 className="mt-3 max-w-md text-white">A job search is a process. Treat it like one.</h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-white/55">
+              Spreadsheets can hold a list. Momentum is built to help you operate the search around that list.
+            </p>
+          </div>
 
-          <p className="mt-5 text-base leading-relaxed text-white/60 md:text-lg">
-            Built around the way applications really move, from a link you saved
-            to an offer you're deciding on.
-          </p>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <div
-              key={feature.title}
-              className="
-                group
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/[0.04]
-                p-6
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:border-white/20
-                hover:bg-white/[0.07]
-              "
-            >
-              <h3 className="text-base font-semibold text-white">
-                {feature.title}
-              </h3>
-
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+          <div className="divide-y divide-white/10 border-y border-white/10">
+            {FEATURES.map(({ icon: Icon, title, description }, index) => (
+              <div key={title} className="group grid gap-4 py-6 sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-6">
+                <span className="font-data text-[10px] text-white/30">0{index + 1}</span>
+                <div>
+                  <h3 className="text-base font-semibold text-white">{title}</h3>
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">{description}</p>
+                </div>
+                <Icon size={18} className="hidden text-white/35 transition-transform duration-200 group-hover:translate-x-1 sm:block" aria-hidden="true" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
