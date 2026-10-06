@@ -19,7 +19,7 @@ function formatDate(dateStr:string){
   return new Date(`${dateStr}T00:00:00`).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
 }
 
-export function ApplicationTable({applications,onRowClick,onEdit,onDelete}:ApplicationTableProps){
+export function ApplicationTable({applications,onRowClick,onEdit}:ApplicationTableProps){
   const columns:Column<Application>[]=[
     {key:"companyName",header:"Company",sortable:true,render:row=><div><p className="font-medium text-ink">{row.companyName}</p><p className="mt-0.5 text-xs text-muted">{row.location??"Location not added"}</p></div>},
     {key:"roleTitle",header:"Role",sortable:true},
