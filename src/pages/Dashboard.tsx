@@ -54,7 +54,7 @@ export default function Dashboard() {
         <RecentActivity entries={activityLog??[]}/>
       </div>
 
-      <AttentionPanel applications={applications ?? []} onOpen={(application) => navigate("/applications?focus=" + application.id)} />
+      <AttentionPanel applications={applications ?? []} onOpen={(application) => navigate("/applications?focus=" + encodeURIComponent(application.id))} />
 
       <div className="flex justify-end"><Link to="/analytics"><Button variant="ghost">View full analytics →</Button></Link></div>
     </>}
