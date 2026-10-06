@@ -2,36 +2,83 @@ import { BarChart3, CalendarClock, KanbanSquare, NotebookPen, Search, Zap } from
 import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout";
 
 const FEATURES = [
-  { icon: KanbanSquare, title: "A pipeline you can see", description: "Know what is Applied, what reached an interview, what turned into an offer, and what is done." },
-  { icon: Search, title: "Find anything fast", description: "Search and filter your applications without losing the context around them." },
-  { icon: NotebookPen, title: "Keep the thread", description: "Store notes, interview rounds, links, and the details you will otherwise forget." },
-  { icon: CalendarClock, title: "Know what is next", description: "Upcoming interviews and ageing applications surface the work that deserves attention." },
-  { icon: BarChart3, title: "Read the pattern", description: "Response, interview, offer, and activity metrics show how the search is actually performing." },
-  { icon: Zap, title: "Move without friction", description: "Change status, schedule interviews, and update applications without fighting the interface." },
+  {
+    icon: KanbanSquare,
+    title: "Board view",
+    description:
+      "Drag applications between Applied, Interviewing, Offer, and Rejected. Status and order persist instantly.",
+  },
+  {
+    icon: Search,
+    title: "Table view",
+    description:
+      "Sort, search, and filter every application at once without losing the context around each role.",
+  },
+  {
+    icon: NotebookPen,
+    title: "Notes & interviews",
+    description:
+      "Keep interview rounds, notes, links, and important details attached to the application they belong to.",
+  },
+  {
+    icon: CalendarClock,
+    title: "Know what is next",
+    description:
+      "Upcoming interviews and ageing applications surface the work that deserves attention.",
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics",
+    description:
+      "Response, interview, offer, and activity metrics show how the search is actually performing.",
+  },
+  {
+    icon: Zap,
+    title: "Less admin",
+    description:
+      "Update statuses, schedule interviews, and keep the pipeline current without fighting the interface.",
+  },
 ];
 
 export function WhyMomentum() {
   return (
-    <section id="features" className={`bg-ink text-white ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}>
+    <section
+      id="features"
+      className={`bg-ink text-white ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}
+    >
       <div className="mx-auto max-w-content">
-        <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
           <div>
-            <p className="font-data text-[10px] uppercase tracking-[0.18em] text-white/45">The point</p>
-            <h2 className="mt-3 max-w-md text-white">A job search is a process. Treat it like one.</h2>
-            <p className="mt-5 max-w-md text-base leading-7 text-white/55">
-              Spreadsheets can hold a list. Momentum is built to help you operate the search around that list.
+            <p className="font-data text-[10px] uppercase tracking-[0.18em] text-white/40">
+              Everything in one place
+            </p>
+            <h2 className="mt-4 max-w-md text-white">
+              Everything your job search actually needs.
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-white/55 md:text-lg">
+              Built around the way applications really move, from a link you saved
+              to an offer you are deciding on.
             </p>
           </div>
 
-          <div className="divide-y divide-white/10 border-y border-white/10">
+          <div className="grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-2">
             {FEATURES.map(({ icon: Icon, title, description }, index) => (
-              <div key={title} className="group grid gap-4 py-6 sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-6">
-                <span className="font-data text-[10px] text-white/30">0{index + 1}</span>
-                <div>
-                  <h3 className="text-base font-semibold text-white">{title}</h3>
-                  <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">{description}</p>
+              <div
+                key={title}
+                className="group bg-ink p-6 transition-colors duration-200 hover:bg-white/[0.045] md:p-7"
+              >
+                <div className="flex items-start justify-between">
+                  <span className="font-data text-[10px] text-white/25">
+                    0{index + 1}
+                  </span>
+                  <Icon
+                    size={18}
+                    className="text-white/35 transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
                 </div>
-                <Icon size={18} className="hidden text-white/35 transition-transform duration-200 group-hover:translate-x-1 sm:block" aria-hidden="true" />
+                <h3 className="mt-8 text-base font-semibold text-white">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/50">{description}</p>
               </div>
             ))}
           </div>
