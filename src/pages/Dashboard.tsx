@@ -8,7 +8,7 @@ import { AttentionPanel } from "../components/dashboard/AttentionPanel";
 import { MomentumSparkline } from "../components/dashboard/MomentumSparkline";
 import { useApplications } from "../hooks/useApplications";
 import { useActivityLog } from "../hooks/useActivityLog";
-import { useAllInterviews } from "../hooks/useInterviews";
+import { useAllInterviews } from "../hooks/useAllInterviews";
 import { UpcomingInterviews } from "../components/dashboard/UpcomingInterviews";
 import { computeDashboardStats, computeWeeklyApplicationCounts } from "../lib/analytics";
 
