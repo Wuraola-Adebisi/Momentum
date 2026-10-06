@@ -1,12 +1,6 @@
 import { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  AlertTriangle,
-  BriefcaseBusiness,
-  CalendarClock,
-  Trophy,
-  TrendingUp,
-} from "lucide-react";
+import { AlertTriangle, BriefcaseBusiness, CalendarClock, Trophy, TrendingUp } from "lucide-react";
 import { Card, Skeleton, EmptyState, Button } from "../components/ui";
 import { StatsCard } from "../components/dashboard/StatsCard";
 import { RecentActivity } from "../components/dashboard/RecentActivity";
@@ -16,139 +10,50 @@ import { useActivityLog } from "../hooks/useActivityLog";
 import { computeDashboardStats, computeWeeklyApplicationCounts } from "../lib/analytics";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const {
-    data: applications,
-    isLoading: applicationsLoading,
-    isError: applicationsError,
-  } = useApplications();
-  const { data: activityLog, isLoading: activityLoading } = useActivityLog();
+  const navigate=useNavigate();
+  const {data:applications,isLoading:applicationsLoading,isError:applicationsError}=useApplications();
+  const {data:activityLog,isLoading:activityLoading}=useActivityLog();
+  const isLoading=applicationsLoading||activityLoading;
 
-  const isLoading = applicationsLoading || activityLoading;
+  const stats=useMemo(()=>applications?computeDashboardStats(applications,activityLog??[]):null,[applications,activityLog]);
+  const weeklyCounts=useMemo(()=>applications?computeWeeklyApplicationCounts(applications):[],[applications]);
+  const hasApplications=!isLoading&&Boolean(applications?.length);
 
-  const stats = useMemo(() => {
-    if (!applications) return null;
-    return computeDashboardStats(applications, activityLog ?? []);
-  }, [applications, activityLog]);
+  return <div className="space-y-7 animate-fade-up">
+    <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-end">
+      <div><p className="eyebrow">Career command center</p><h1 className="mt-2">Keep the search moving.</h1><p className="mt-3 max-w-2xl text-muted">See what needs attention, where your applications are landing, and how consistently you’re moving the pipeline.</p></div>
+      {hasApplications&&<Button variant="accent" onClick={()=>navigate("/applications?new=true")}><BriefcaseBusiness size={17}/> Add application</Button>}
+    </div>
 
-  const weeklyCounts = useMemo(() => {
-    if (!applications) return [];
-    return computeWeeklyApplicationCounts(applications);
-  }, [applications]);
+    {isLoading&&<div className="space-y-5"><div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">{[1,2,3,4].map(i=><Skeleton key={i} className="h-32 w-full rounded-2xl"/>)}</div><div className="grid gap-4 lg:grid-cols-2"><Skeleton className="h-72 rounded-2xl"/><Skeleton className="h-72 rounded-2xl"/></div></div>}
 
-  const hasApplications = !isLoading && applications && applications.length > 0;
+    {applicationsError&&<EmptyState icon={AlertTriangle} tone="error" title="Couldn't load your dashboard" description="Something went wrong fetching your data. Refresh the page to try again."/>}
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl font-bold text-ink">
-          Dashboard
-        </h1>
-        <p className="mt-1 font-body text-muted">
-          Welcome back. Here's where your job search stands.
-        </p>
+    {!isLoading&&!applicationsError&&!hasApplications&&<Card padding="lg" className="overflow-hidden">
+      <div className="max-w-xl"><p className="eyebrow">First move</p><h2 className="mt-2">Build your pipeline before you build your routine.</h2><p className="mt-3 text-muted">Add the first role you’re pursuing. Momentum will turn the raw application history into useful signals as you go.</p><div className="mt-6"><Button variant="accent" onClick={()=>navigate("/applications?new=true")}>Add your first application</Button></div></div>
+    </Card>}
+
+    {!isLoading&&!applicationsError&&hasApplications&&stats&&<>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatsCard label="Active applications" value={String(stats.totalActive)} icon={BriefcaseBusiness} accent="primary"/>
+        <StatsCard label="Interviewing" value={String(stats.interviewCount)} icon={CalendarClock} accent="interviewing"/>
+        <StatsCard label="Offers" value={String(stats.offerCount)} icon={Trophy} accent="offer"/>
+        <StatsCard label="Response rate" value={String(stats.responseRate)+"%"} icon={TrendingUp} accent="ink"/>
       </div>
 
-      {isLoading && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-24 w-full" />
+      <div className="grid gap-4 xl:grid-cols-[1.35fr_.85fr]">
+        <Card padding="lg">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div><p className="eyebrow">Consistency</p><h2 className="mt-1 text-3xl">Application activity</h2><p className="mt-1 text-sm text-muted">Applications submitted over the last 8 weeks</p></div>
+            {stats.avgResponseDays!==null&&<div className="rounded-full bg-paper px-3 py-2 font-data text-xs text-muted">Avg. response {stats.avgResponseDays}d</div>}
           </div>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-64 w-full" />
-          </div>
-        </div>
-      )}
+          <MomentumSparkline data={weeklyCounts.map(week=>week.count)} className="mt-6 h-40 w-full"/>
+          <div className="mt-2 flex justify-between font-data text-[11px] text-muted"><span>{weeklyCounts[0]?.weekLabel}</span><span>{weeklyCounts[weeklyCounts.length-1]?.weekLabel}</span></div>
+        </Card>
+        <RecentActivity entries={activityLog??[]}/>
+      </div>
 
-      {applicationsError && (
-        <EmptyState
-          icon={AlertTriangle}
-          tone="error"
-          title="Couldn't load your dashboard"
-          description="Something went wrong fetching your data. Refresh the page to try again."
-        />
-      )}
-
-      {!isLoading && !applicationsError && !hasApplications && (
-        <EmptyState
-          icon={BriefcaseBusiness}
-          title="No applications yet"
-          description="Add your first application to start seeing your stats and activity here."
-          actionLabel="Add application"
-          onAction={() => navigate("/applications?new=true")}
-        />
-      )}
-
-      {!isLoading && !applicationsError && hasApplications && stats && (
-        <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatsCard
-              label="Active applications"
-              value={String(stats.totalActive)}
-              icon={BriefcaseBusiness}
-              accent="primary"
-            />
-            <StatsCard
-              label="Interviewing"
-              value={String(stats.interviewCount)}
-              icon={CalendarClock}
-              accent="interviewing"
-            />
-            <StatsCard
-              label="Offers"
-              value={String(stats.offerCount)}
-              icon={Trophy}
-              accent="offer"
-            />
-            <StatsCard
-              label="Response rate"
-              value={`${stats.responseRate}%`}
-              icon={TrendingUp}
-              accent="ink"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 3xl:grid-cols-2">
-            <Card padding="lg">
-              <div className="mb-4 flex items-center justify-between">
-                <div>
-                  <h2 className="font-display text-lg font-semibold text-ink">
-                    Application activity
-                  </h2>
-                  <p className="mt-0.5 font-body text-sm text-muted">
-                    Applications submitted over the last 8 weeks
-                  </p>
-                </div>
-                {stats.avgResponseDays !== null && (
-                  <p className="font-data text-sm text-muted">
-                    Avg. response: {stats.avgResponseDays}d
-                  </p>
-                )}
-              </div>
-              <MomentumSparkline
-                data={weeklyCounts.map((week) => week.count)}
-                className="h-32 w-full"
-              />
-              <div className="mt-2 flex justify-between font-data text-xs text-muted">
-                <span>{weeklyCounts[0]?.weekLabel}</span>
-                <span>{weeklyCounts[weeklyCounts.length - 1]?.weekLabel}</span>
-              </div>
-            </Card>
-
-            <RecentActivity entries={activityLog ?? []} />
-          </div>
-
-          <div className="flex justify-end">
-            <Link to="/analytics">
-              <Button variant="ghost">View full analytics</Button>
-            </Link>
-          </div>
-        </>
-      )}
-    </div>
-  );
+      <div className="flex justify-end"><Link to="/analytics"><Button variant="ghost">View full analytics →</Button></Link></div>
+    </>}
+  </div>;
 }
