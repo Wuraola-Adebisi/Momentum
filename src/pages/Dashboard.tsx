@@ -8,13 +8,16 @@ import { AttentionPanel } from "../components/dashboard/AttentionPanel";
 import { MomentumSparkline } from "../components/dashboard/MomentumSparkline";
 import { useApplications } from "../hooks/useApplications";
 import { useActivityLog } from "../hooks/useActivityLog";
+import { useAllInterviews } from "../hooks/useInterviews";
+import { UpcomingInterviews } from "../components/dashboard/UpcomingInterviews";
 import { computeDashboardStats, computeWeeklyApplicationCounts } from "../lib/analytics";
 
 export default function Dashboard() {
   const navigate=useNavigate();
   const {data:applications,isLoading:applicationsLoading,isError:applicationsError}=useApplications();
   const {data:activityLog,isLoading:activityLoading}=useActivityLog();
-  const isLoading=applicationsLoading||activityLoading;
+  const {data:interviews,isLoading:interviewsLoading}=useAllInterviews();
+  const isLoading=applicationsLoading||activityLoading||interviewsLoading;
 
   const stats=useMemo(()=>applications?computeDashboardStats(applications,activityLog??[]):null,[applications,activityLog]);
   const weeklyCounts=useMemo(()=>applications?computeWeeklyApplicationCounts(applications):[],[applications]);
@@ -54,7 +57,10 @@ export default function Dashboard() {
         <RecentActivity entries={activityLog??[]}/>
       </div>
 
-      <AttentionPanel applications={applications ?? []} onOpen={(application) => navigate("/applications?focus=" + encodeURIComponent(application.id))} />
+      <div className="grid gap-4 xl:grid-cols-2">
+        <AttentionPanel applications={applications ?? []} onOpen={(application) => navigate("/applications?focus=" + encodeURIComponent(application.id))} />
+        <UpcomingInterviews applications={applications ?? []} interviews={interviews ?? []} onOpen={(application) => navigate("/applications?focus=" + encodeURIComponent(application.id))} />
+      </div>
 
       <div className="flex justify-end"><Link to="/analytics"><Button variant="ghost">View full analytics →</Button></Link></div>
     </>}
