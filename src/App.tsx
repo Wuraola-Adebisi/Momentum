@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 
 import LoginPage from "./pages/LoginPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 import Homepage from "./pages/Homepage";
 import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
@@ -164,6 +165,15 @@ export default function App() {
           </ErrorBoundary>
         }
       />
+      <Route
+        path="/auth/callback"
+        element={
+          <ErrorBoundary label="Authentication callback">
+            <AuthCallbackPage />
+          </ErrorBoundary>
+        }
+      />
+
       <Route
         path="/reset-password"
         element={
