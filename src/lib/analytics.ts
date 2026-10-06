@@ -63,6 +63,11 @@ function getFirstResponseTimestamps(
   for (const entry of activityLog) {
     if (entry.actionType !== "status_changed" || !entry.applicationId) continue;
 
+    // Only a move into a response stage counts. A later move back to Applied
+    // should never become the "first response".
+    const targetStatus = entry.description.match(/^Moved to (.+)$/)?.[1];
+    if (!targetStatus || targetStatus.toLowerCase() === "applied") continue;
+
     const existing = firstResponse.get(entry.applicationId);
     if (!existing || entry.createdAt < existing) {
       firstResponse.set(entry.applicationId, entry.createdAt);
