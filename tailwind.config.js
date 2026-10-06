@@ -9,9 +9,9 @@ export default {
         status: { applied: "#2457FF", interviewing: "#7357D8", offer: "#15966D", rejected: "#D95C5C" },
       },
       fontFamily: {
-        display: ["Instrument Serif", "Georgia", "serif"],
-        body: ["Instrument Sans", "Arial", "sans-serif"],
-        data: ["DM Mono", "monospace"],
+        display: ["Geist", "sans-serif"],
+        body: ["Geist", "sans-serif"],
+        data: ["Geist Mono", "monospace"],
       },
       maxWidth: { content: "1760px" },
       boxShadow: {
