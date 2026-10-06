@@ -26,7 +26,15 @@ export default function Applications() {
   const [pendingDelete,setPendingDelete] = useState<Application|null>(null);
   const [detailApplication,setDetailApplication] = useState<Application|null>(null);
   const newParam=searchParams.get("new");
+  const focusParam=searchParams.get("focus");
   const [prevNewParam,setPrevNewParam]=useState(newParam);
+  const [prevFocusParam,setPrevFocusParam]=useState(focusParam);
+
+  if(focusParam!==prevFocusParam && applications){
+    setPrevFocusParam(focusParam);
+    const focused=applications.find(a=>a.id===focusParam);
+    if(focused)setDetailApplication(focused);
+  }
 
   if(newParam!==prevNewParam){
     setPrevNewParam(newParam);
