@@ -4,6 +4,7 @@ import { AlertTriangle, BriefcaseBusiness, CalendarClock, Trophy, TrendingUp } f
 import { Card, Skeleton, EmptyState, Button } from "../components/ui";
 import { StatsCard } from "../components/dashboard/StatsCard";
 import { RecentActivity } from "../components/dashboard/RecentActivity";
+import { AttentionPanel } from "../components/dashboard/AttentionPanel";
 import { MomentumSparkline } from "../components/dashboard/MomentumSparkline";
 import { useApplications } from "../hooks/useApplications";
 import { useActivityLog } from "../hooks/useActivityLog";
@@ -52,6 +53,8 @@ export default function Dashboard() {
         </Card>
         <RecentActivity entries={activityLog??[]}/>
       </div>
+
+      <AttentionPanel applications={applications ?? []} onOpen={(application) => navigate("/applications?focus=" + application.id)} />
 
       <div className="flex justify-end"><Link to="/analytics"><Button variant="ghost">View full analytics →</Button></Link></div>
     </>}
