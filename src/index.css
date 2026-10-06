@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -11,9 +11,9 @@
     background-image: linear-gradient(rgba(16,33,59,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(16,33,59,.025) 1px,transparent 1px);
     background-size: 32px 32px;
   }
-  h1 { @apply font-display text-4xl font-normal leading-[0.98] tracking-[-0.025em] md:text-5xl lg:text-6xl; }
-  h2 { @apply font-display text-3xl font-normal leading-tight tracking-[-0.02em] md:text-4xl; }
-  h3 { @apply font-body text-xl font-semibold tracking-[-0.015em] md:text-2xl; }
+  h1 { @apply font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] md:text-6xl lg:text-7xl; }
+  h2 { @apply font-display text-3xl font-semibold leading-tight tracking-[-0.025em] md:text-5xl; }
+  h3 { @apply font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl; }
   p { @apply leading-7; }
   button,a,input,select,textarea { @apply transition-colors; }
   button,a { touch-action: manipulation; }
