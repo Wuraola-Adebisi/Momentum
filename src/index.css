@@ -5,36 +5,27 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply scroll-smooth;
-  }
-
+  html { @apply scroll-smooth; background: #F5F4EF; }
   body {
     @apply bg-paper text-ink font-body antialiased;
+    background-image: linear-gradient(rgba(16,33,59,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(16,33,59,.025) 1px,transparent 1px);
+    background-size: 32px 32px;
   }
-
-  h1 {
-    @apply font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] md:text-6xl lg:text-7xl;
-  }
-
-  h2 {
-    @apply font-display text-3xl font-semibold leading-tight tracking-[-0.025em] md:text-5xl;
-  }
-
-  h3 {
-    @apply font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl;
-  }
-
-  p {
-    @apply leading-7;
-  }
-
-  button,
-  a {
-    @apply transition-colors;
-  }
-
-  ::selection {
-    @apply bg-primary/20 text-ink;
-  }
+  h1 { @apply font-display text-5xl font-semibold leading-[0.95] tracking-[-0.03em] md:text-6xl lg:text-7xl; }
+  h2 { @apply font-display text-3xl font-semibold leading-tight tracking-[-0.025em] md:text-5xl; }
+  h3 { @apply font-display text-xl font-semibold tracking-[-0.02em] md:text-2xl; }
+  p { @apply leading-7; }
+  button,a,input,select,textarea { @apply transition-colors; }
+  button,a { touch-action: manipulation; }
+  :focus-visible { @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-paper; }
+  ::selection { @apply bg-primary/20 text-ink; }
+}
+@layer components {
+  .eyebrow { @apply font-data text-[11px] font-medium uppercase tracking-[0.16em] text-muted; }
+  .page-shell { @apply mx-auto w-full max-w-content px-4 pb-24 md:px-8 md:pb-8; }
+  .status-rule { @apply h-1 w-10 rounded-full; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
 }

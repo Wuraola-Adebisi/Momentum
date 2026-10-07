@@ -19,32 +19,31 @@ const TABS: Tab[] = [
   {
     key: "board",
     label: "Board view",
-    title: "Drag it where it belongs.",
+    title: "See the whole pipeline at a glance.",
     description:
-      "Move a card between Applied, Interviewing, Offer, and Rejected. The status updates instantly, and rolls back automatically if the save fails.",
+      "Move applications between stages and immediately see where the search is concentrated.",
     preview: <BoardPreview />,
   },
   {
     key: "table",
     label: "Table view",
-    title: "Scan everything at once.",
+    title: "Scan the details when you need them.",
     description:
-      "Sort by date, filter by status, search by company, all reflected in the URL so you can bookmark or share the exact view you built.",
+      "Search, sort, and filter every application without losing the underlying record.",
     preview: <TablePreview />,
   },
   {
     key: "notes",
     label: "Notes & interviews",
-    title: "Never lose the thread.",
+    title: "Keep the thread attached to the role.",
     description:
-      "Every note and every interview stays attached to the application it belongs to, opening right where you are.",
+      "Interview notes and application details stay together instead of disappearing into separate documents.",
     preview: <NotesPreview />,
   },
 ];
 
 export function ShowcaseTabs() {
   const [activeKey, setActiveKey] = useState(TABS[0].key);
-
   const activeTab = TABS.find((tab) => tab.key === activeKey) ?? TABS[0];
 
   return (
@@ -53,14 +52,23 @@ export function ShowcaseTabs() {
       className={`bg-surface ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}
     >
       <div className="mx-auto max-w-content">
-        <div className="max-w-2xl">
-          <h2>One dataset, three ways to look at it.</h2>
+        <div className="grid gap-8 border-b border-line pb-8 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <p className="font-data text-[10px] uppercase tracking-[0.18em] text-muted">
+              The product
+            </p>
+            <h2 className="mt-3 max-w-2xl">One dataset, three ways to look at it.</h2>
+          </div>
+          <p className="max-w-sm text-sm leading-6 text-muted">
+            The same application record stays useful whether you are moving cards,
+            scanning details, or preparing for an interview.
+          </p>
         </div>
 
         <div
           role="tablist"
           aria-label="Momentum feature showcase"
-          className="mt-10 flex flex-wrap justify-center gap-2 md:mt-12"
+          className="mt-8 flex overflow-x-auto border-b border-line"
         >
           {TABS.map((tab) => (
             <button
@@ -69,93 +77,46 @@ export function ShowcaseTabs() {
               aria-selected={tab.key === activeKey}
               onClick={() => setActiveKey(tab.key)}
               className={clsx(
-                `
-                rounded-full
-                border
-                px-5
-                py-2.5
-                text-sm
-                font-semibold
-                transition-all
-                duration-200
-              `,
+                "relative shrink-0 px-4 py-4 text-sm font-semibold transition-colors first:pl-0",
                 tab.key === activeKey
-                  ? "border-ink bg-ink text-white shadow-sm"
-                  : "border-muted/20 bg-white text-muted hover:border-muted/40 hover:text-ink",
+                  ? "text-ink"
+                  : "text-muted hover:text-ink",
               )}
             >
               {tab.label}
+              {tab.key === activeKey && (
+                <span className="absolute inset-x-4 bottom-0 h-0.5 bg-primary first:left-0" />
+              )}
             </button>
           ))}
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-5 md:mt-12 lg:grid-cols-[0.85fr_1.15fr]">
-          <div
-            className="
-              flex
-              flex-col
-              justify-center
-              rounded-3xl
-              bg-ink
-              px-8
-              py-10
-              md:px-10
-            "
-          >
-            <h3 className="font-display text-2xl font-bold text-white">
+        <div className="mt-8 grid overflow-hidden border border-line bg-paper lg:grid-cols-[0.7fr_1.3fr]">
+          <div className="flex flex-col justify-center border-b border-line p-7 sm:p-9 lg:border-b-0 lg:border-r lg:p-10">
+            <span className="font-data text-[10px] uppercase tracking-[0.16em] text-muted">
+              {activeTab.label}
+            </span>
+            <h3 className="mt-4 font-display text-2xl font-normal leading-tight text-ink md:text-3xl">
               {activeTab.title}
             </h3>
-
-            <p className="mt-4 text-sm leading-relaxed text-white/60">
+            <p className="mt-4 max-w-md text-sm leading-6 text-muted">
               {activeTab.description}
             </p>
-
             <Link
               to="/login?mode=signup"
-              className="
-                group
-                mt-7
-                inline-flex
-                w-fit
-                items-center
-                gap-2
-                rounded-full
-                bg-white/10
-                px-4
-                py-2
-                text-sm
-                font-semibold
-                text-white
-                transition-colors
-                hover:bg-white/20
-              "
+              className="group mt-7 inline-flex w-fit items-center gap-2 text-sm font-semibold text-primary"
             >
               Try {activeTab.label.toLowerCase()}
               <ArrowRight
                 size={16}
                 className="transition-transform duration-200 group-hover:translate-x-1"
+                aria-hidden="true"
               />
             </Link>
           </div>
 
-          <div
-            className="
-              flex
-              min-h-[280px]
-              items-center
-              justify-center
-              overflow-hidden
-              rounded-3xl
-              border
-              border-muted/15
-              bg-paper
-              p-6
-              transition-all
-              duration-300
-              md:p-8
-            "
-          >
-            {activeTab.preview}
+          <div className="flex min-h-[310px] items-center overflow-hidden p-4 sm:p-7">
+            <div className="w-full min-w-0">{activeTab.preview}</div>
           </div>
         </div>
       </div>

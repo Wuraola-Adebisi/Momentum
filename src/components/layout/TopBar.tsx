@@ -15,39 +15,23 @@ export default function TopBar() {
   }
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-muted/20 bg-paper px-4 md:px-8">
-      {/* Search */}
-
-      <div className="relative w-full max-w-[10rem] sm:max-w-xs md:max-w-md">
-        <Search
-          size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
-        />
-
+    <header className="sticky top-0 z-10 flex min-h-20 items-center justify-between gap-4 border-b border-line/70 bg-paper/90 px-4 backdrop-blur md:px-8">
+      <div className="relative w-full max-w-[14rem] sm:max-w-xs md:max-w-md">
+        <Search size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true" />
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") runSearch();
-          }}
-          placeholder="Search applications..."
+          onKeyDown={(e) => { if (e.key === "Enter") runSearch(); }}
+          placeholder="Search company or role…"
           aria-label="Search applications"
-          className="pl-10"
+          className="h-11 rounded-full bg-surface pl-10 shadow-[0_1px_0_rgba(16,33,59,0.03)]"
         />
       </div>
-
-      {/* Actions */}
-
-      <div className="ml-4 flex items-center gap-2 md:ml-8 md:gap-4">
-        <Button
-          variant="accent"
-          aria-label="Add application"
-          onClick={() => navigate("/applications?new=true")}
-        >
-          <Plus size={18} />
-          <span className="hidden sm:inline">Add Application</span>
+      <div className="ml-auto flex items-center gap-2 md:gap-3">
+        <Button variant="accent" aria-label="Add application" onClick={() => navigate("/applications?new=true")}>
+          <Plus size={17} aria-hidden="true" />
+          <span className="hidden sm:inline">Add application</span>
         </Button>
-
         <Avatar name="Wuraola Adebisi" />
       </div>
     </header>

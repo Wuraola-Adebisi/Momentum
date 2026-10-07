@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "./useAuth";
 import { useToast } from "./useToast";
 import { mapInterview, toInterviewInsert } from "../lib/mappers";
+import { allInterviewsKey } from "./useAllInterviews";
 import type { CreateInterviewInput, Interview } from "../types";
 
 export function interviewsKey(applicationId: string) {
@@ -46,6 +47,33 @@ export function useCreateInterview(applicationId: string) {
 
       if (error) throw error;
 
+      // Scheduling an interview is a meaningful pipeline transition. If the
+      // application is still in Applied, move it into Interviewing so the
+      // tracker stays consistent with the action the user just took.
+      const { data: application } = await supabase
+        .from("applications")
+        .select("status")
+        .eq("id", applicationId)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (application?.status === "applied") {
+        const { error: statusError } = await supabase
+          .from("applications")
+          .update({ status: "interviewing" })
+          .eq("id", applicationId)
+          .eq("user_id", user.id);
+
+        if (statusError) throw statusError;
+
+        await supabase.from("activity_log").insert({
+          user_id: user.id,
+          application_id: applicationId,
+          action_type: "status_changed",
+          description: "Moved to Interviewing",
+        });
+      }
+
       await supabase.from("activity_log").insert({
         user_id: user.id,
         application_id: applicationId,
@@ -57,6 +85,8 @@ export function useCreateInterview(applicationId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: interviewsKey(applicationId) });
+      queryClient.invalidateQueries({ queryKey: allInterviewsKey });
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
       queryClient.invalidateQueries({ queryKey: ["activityLog"] });
       toast.success("Interview scheduled");
     },

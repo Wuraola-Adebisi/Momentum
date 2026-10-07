@@ -11,6 +11,7 @@ import {
   computeDashboardStats,
   computeStatusBreakdown,
   computeWeeklyApplicationCounts,
+  computeFunnelMetrics,
 } from "../lib/analytics";
 
 export default function Analytics() {
@@ -32,6 +33,11 @@ export default function Analytics() {
   const breakdown = useMemo(() => {
     if (!applications) return [];
     return computeStatusBreakdown(applications);
+  }, [applications]);
+
+  const funnel = useMemo(() => {
+    if (!applications) return null;
+    return computeFunnelMetrics(applications);
   }, [applications]);
 
   const weeklyCounts = useMemo(() => {
@@ -82,6 +88,24 @@ export default function Analytics() {
           <div className="lg:col-span-2 3xl:col-span-1">
             <ApplicationsPerWeekChart data={weeklyCounts} />
           </div>
+          {funnel && (
+            <div className="lg:col-span-2 3xl:col-span-3">
+              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line/70 bg-line/70 sm:grid-cols-4">
+                {[
+                  ["Response", funnel.responseRate + "%", "moved past applied"],
+                  ["Interview", funnel.interviewRate + "%", "reached interview"],
+                  ["Offer", funnel.offerRate + "%", "reached offer"],
+                  ["Avg. age", funnel.averageAge + "d", "in your pipeline"],
+                ].map(([label, value, detail]) => (
+                  <div key={label} className="bg-surface p-5">
+                    <p className="eyebrow">{label}</p>
+                    <p className="mt-2 font-data text-2xl font-semibold text-ink">{value}</p>
+                    <p className="mt-1 text-xs text-muted">{detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

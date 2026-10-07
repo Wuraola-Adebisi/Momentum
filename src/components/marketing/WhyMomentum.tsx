@@ -1,40 +1,42 @@
+import { BarChart3, CalendarClock, KanbanSquare, NotebookPen, Search, Zap } from "lucide-react";
 import { SECTION_PADDING_X, SECTION_PADDING_Y } from "./layout";
 
-interface Feature {
-  title: string;
-  description: string;
-}
-
-const FEATURES: Feature[] = [
+const FEATURES = [
   {
+    icon: KanbanSquare,
     title: "Board view",
     description:
       "Drag applications between Applied, Interviewing, Offer, and Rejected. Status and order persist instantly.",
   },
   {
+    icon: Search,
     title: "Table view",
     description:
-      "Sort and filter every application at once. Search, status, and sorting live in the URL, so a view is one link away.",
+      "Sort, search, and filter every application at once without losing the context around each role.",
   },
   {
+    icon: NotebookPen,
     title: "Notes & interviews",
     description:
-      "Log interview rounds and keep running notes on every application, right inside its detail view.",
+      "Keep interview rounds, notes, links, and important details attached to the application they belong to.",
   },
   {
+    icon: CalendarClock,
+    title: "Know what is next",
+    description:
+      "Upcoming interviews and ageing applications surface the work that deserves attention.",
+  },
+  {
+    icon: BarChart3,
     title: "Analytics",
     description:
-      "Response rate, applications per week, and time to first response. Understand the shape of your search, not just a list.",
+      "Response, interview, offer, and activity metrics show how the search is actually performing.",
   },
   {
-    title: "Activity log",
+    icon: Zap,
+    title: "Less admin",
     description:
-      "Every status change, note, and scheduled interview is timestamped automatically. Nothing gets lost.",
-  },
-  {
-    title: "Shareable filters",
-    description:
-      "Every filter, sort, and search lives in the URL. Bookmark a view and return exactly where you left off.",
+      "Update statuses, schedule interviews, and keep the pipeline current without fighting the interface.",
   },
 ];
 
@@ -45,44 +47,41 @@ export function WhyMomentum() {
       className={`bg-ink text-white ${SECTION_PADDING_X} ${SECTION_PADDING_Y}`}
     >
       <div className="mx-auto max-w-content">
-        <div className="max-w-2xl">
-          <h2 className="text-white">
-            Everything your job search actually needs.
-          </h2>
+        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div>
+            <p className="font-data text-[10px] uppercase tracking-[0.18em] text-white/40">
+              Everything in one place
+            </p>
+            <h2 className="mt-4 max-w-md text-white">
+              Everything your job search actually needs.
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-white/55 md:text-lg">
+              Built around the way applications really move, from a link you saved
+              to an offer you are deciding on.
+            </p>
+          </div>
 
-          <p className="mt-5 text-base leading-relaxed text-white/60 md:text-lg">
-            Built around the way applications really move, from a link you saved
-            to an offer you're deciding on.
-          </p>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mt-14 lg:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <div
-              key={feature.title}
-              className="
-                group
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/[0.04]
-                p-6
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:border-white/20
-                hover:bg-white/[0.07]
-              "
-            >
-              <h3 className="text-base font-semibold text-white">
-                {feature.title}
-              </h3>
-
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+          <div className="grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-2">
+            {FEATURES.map(({ icon: Icon, title, description }, index) => (
+              <div
+                key={title}
+                className="group bg-ink p-6 transition-colors duration-200 hover:bg-white/[0.045] md:p-7"
+              >
+                <div className="flex items-start justify-between">
+                  <span className="font-data text-[10px] text-white/25">
+                    0{index + 1}
+                  </span>
+                  <Icon
+                    size={18}
+                    className="text-white/35 transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h3 className="mt-8 text-base font-semibold text-white">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-white/50">{description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -7,6 +7,54 @@ import type {
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 
+export function applicationAge(application: Application, now = new Date()): number {
+  const applied = new Date(application.appliedDate + "T00:00:00").getTime();
+  const current = now.getTime();
+  return Math.max(0, Math.floor((current - applied) / MS_PER_DAY));
+}
+
+export function getNextAction(application: Application): string {
+  switch (application.status) {
+    case "interviewing":
+      return "Prepare";
+    case "offer":
+      return "Review";
+    case "rejected":
+      return "Archive";
+    default:
+      return applicationAge(application) >= 7 ? "Follow up" : "Review";
+  }
+}
+
+export interface FunnelMetrics {
+  total: number;
+  active: number;
+  responseRate: number;
+  interviewRate: number;
+  offerRate: number;
+  averageAge: number;
+}
+
+export function computeFunnelMetrics(applications: Application[]): FunnelMetrics {
+  const total = applications.length;
+  const active = applications.filter((a) => a.status !== "rejected").length;
+  const responded = applications.filter((a) => a.status !== "applied").length;
+  const interviewing = applications.filter((a) => a.status === "interviewing").length;
+  const offers = applications.filter((a) => a.status === "offer").length;
+  const averageAge = total === 0
+    ? 0
+    : Math.round(applications.reduce((sum, application) => sum + applicationAge(application), 0) / total * 10) / 10;
+
+  return {
+    total,
+    active,
+    responseRate: total ? Math.round((responded / total) * 100) : 0,
+    interviewRate: total ? Math.round((interviewing / total) * 100) : 0,
+    offerRate: total ? Math.round((offers / total) * 100) : 0,
+    averageAge,
+  };
+}
+
 function getFirstResponseTimestamps(
   activityLog: ActivityLogEntry[],
 ): Map<string, string> {
@@ -14,6 +62,11 @@ function getFirstResponseTimestamps(
 
   for (const entry of activityLog) {
     if (entry.actionType !== "status_changed" || !entry.applicationId) continue;
+
+    // Only a move into a response stage counts. A later move back to Applied
+    // should never become the "first response".
+    const targetStatus = entry.description.match(/^Moved to (.+)$/)?.[1];
+    if (!targetStatus || targetStatus.toLowerCase() === "applied") continue;
 
     const existing = firstResponse.get(entry.applicationId);
     if (!existing || entry.createdAt < existing) {

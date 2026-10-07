@@ -1,109 +1,28 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, BriefcaseBusiness, BarChart3 } from "lucide-react";
+import { LayoutDashboard,BriefcaseBusiness,BarChart3 } from "lucide-react";
 import clsx from "clsx";
 
-type SidebarProps = {
-  collapsed?: boolean;
-};
+const navigation=[{name:"Dashboard",href:"/dashboard",icon:LayoutDashboard},{name:"Applications",href:"/applications",icon:BriefcaseBusiness},{name:"Analytics",href:"/analytics",icon:BarChart3}];
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Applications",
-    href: "/applications",
-    icon: BriefcaseBusiness,
-  },
-  {
-    name: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-  },
-];
-
-export default function Sidebar({ collapsed = false }: SidebarProps) {
-  return (
-    <>
-      <aside
-        className={clsx(
-          "hidden md:flex md:h-screen md:flex-col border-r border-muted/20 bg-paper transition-all duration-300",
-          collapsed ? "md:w-20" : "md:w-20 lg:w-64",
-        )}
-      >
-        {/* Logo */}
-
-        <div className="flex h-16 items-center justify-center px-3 lg:justify-start lg:px-6">
-          <span className="font-display text-2xl font-bold text-primary lg:hidden">
-            M
-          </span>
-
-          {!collapsed && (
-            <span className="hidden font-display text-xl font-bold text-ink lg:inline">
-              Momentum
-            </span>
-          )}
-        </div>
-
-        {/* Navigation */}
-
-        <nav className="mt-6 flex flex-col gap-2 px-3">
-          {navigation.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <NavLink
-                key={item.href}
-                to={item.href}
-                className={({ isActive }) =>
-                  clsx(
-                    "flex items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors duration-200",
-
-                    "justify-center lg:justify-start lg:gap-3",
-                    collapsed && "lg:justify-center",
-
-                    isActive
-                      ? "bg-primary text-white"
-                      : "text-muted hover:bg-surface hover:text-ink",
-                  )
-                }
-              >
-                <Icon size={20} strokeWidth={2} />
-
-                {!collapsed && (
-                  <span className="hidden lg:inline">{item.name}</span>
-                )}
-              </NavLink>
-            );
-          })}
-        </nav>
-      </aside>
-
-      {/* Mobile bottom tab bar */}
-
-      <nav className="fixed inset-x-0 bottom-0 z-20 flex h-16 items-center justify-around border-t border-muted/20 bg-paper md:hidden">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              className={({ isActive }) =>
-                clsx(
-                  "flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors duration-200",
-                  isActive ? "text-primary" : "text-muted",
-                )
-              }
-            >
-              <Icon size={20} strokeWidth={2} />
-              <span>{item.name}</span>
-            </NavLink>
-          );
-        })}
+export default function Sidebar(){
+  return <>
+    <aside className="hidden h-screen w-64 shrink-0 flex-col border-r border-line/70 bg-surface/85 backdrop-blur md:flex">
+      <div className="flex h-20 items-center px-7">
+        <NavLink to="/dashboard" className="flex items-baseline gap-2" aria-label="Momentum home">
+          <span className="font-display text-3xl text-ink">Momentum</span><span className="font-data text-[9px] uppercase tracking-[0.18em] text-primary">career OS</span>
+        </NavLink>
+      </div>
+      <nav aria-label="Primary" className="flex flex-col gap-1 px-4">
+        {navigation.map(({name,href,icon:Icon})=><NavLink key={href} to={href} className={({isActive})=>clsx("group flex min-h-11 items-center gap-3 rounded-xl px-3.5 text-sm font-medium",isActive?"bg-ink text-paper shadow-soft":"text-muted hover:bg-paper hover:text-ink")}>
+          <Icon size={18} strokeWidth={1.9} aria-hidden="true"/><span>{name}</span>
+        </NavLink>)}
       </nav>
-    </>
-  );
+      <div className="mt-auto border-t border-line/70 px-7 py-6"><p className="eyebrow">Keep moving</p><p className="mt-2 text-sm leading-6 text-muted">Track the work between applications, interviews, and offers.</p></div>
+    </aside>
+    <nav aria-label="Primary" className="fixed inset-x-0 bottom-0 z-20 flex h-16 items-center justify-around border-t border-line/80 bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+      {navigation.map(({name,href,icon:Icon})=><NavLink key={href} to={href} className={({isActive})=>clsx("flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium",isActive?"text-primary":"text-muted")}>
+        <Icon size={19} strokeWidth={1.9} aria-hidden="true"/><span>{name}</span>
+      </NavLink>)}
+    </nav>
+  </>;
 }
